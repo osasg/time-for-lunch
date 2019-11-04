@@ -5,6 +5,7 @@ import { observable, action, runInAction } from 'mobx';
 import TopNav from '../components/TopNav';
 import MealView from '../components/MealView';
 import SearchIcon from '../static/icons/search.svg';
+import RemoveIcon from '../static/icons/remove.svg';
 
 const searchState = observable({
   text: ''
@@ -37,7 +38,10 @@ const Lunch = inject(['appState'])(observer(({ appState }) => {
       <div className="picked">
         <div className="today-pick">
           <div className="picked__title">Today pick</div>
-          <img className="today-pick__image" src={pickedMeal.imageSrc} alt="Picked meal image" />
+          <div className="today-pick__image-wrapper">
+            <img className="today-pick__image" src={pickedMeal.imageSrc} alt="Picked meal image" />
+            <div className="today-pick__remove"><RemoveIcon /></div>
+          </div>
           <div className="today-pick__name">{pickedMeal.name}</div>
         </div>
         <div className="previous-picks">

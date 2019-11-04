@@ -158,14 +158,18 @@ body {
 
 .top-nav__logo {
   flex: 1 1 0;
-  color: $primaryColor;
   font-family: Staatliches;
   font-size: 24px;
   font-weight: 400;
   text-transform: uppercase;
 }
 
-.top-nav__current-user {
+.top-nav__logo a {
+  color: $primaryColor;
+  text-decoration: none;
+}
+
+.top-nav__current-user a {
   display: flex;
   align-items: center;
 }
@@ -190,11 +194,11 @@ body {
 
 .search {
   grid-column: 1/10;
-  height: 186px;
+  height: 156px;
 }
 
 .search-wrapper {
-  margin-top: 88px;
+  margin-top: 58px;
   width: 608px;
   height: 66px;
   border-radius: 80px;
@@ -233,19 +237,30 @@ body {
   height: 209px;
 }
 
-.meal__image {
+.meal_image-wrapper {
   width: 100%;
   height: 180px;
+  background-color: $primaryColor;
+  background-color: #e4e4e4;
+}
+
+.meal__image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
 .meal__name {
   margin-top: 8px;
+  display: inline-block;
 }
 
 .picked {
   grid-column: span 3/-1;
   grid-row: 1/-1;
+  margin-left: 26px;
+  padding-left: 16px;
+  border-left: 4px solid $primaryColor;
 }
 
 .picked__title {
@@ -255,14 +270,34 @@ body {
 }
 
 .today-pick {
-  height: 242px;
+  height: 212px;
+}
+
+.today-pick__image-wrapper {
+  width: 242px;
+  height: 109px;
+  position: relative;
+  background-color: #e4e4e4;
 }
 
 .today-pick__image {
-  width: 242px;
-  height: 109px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  background-color: #e4e4e4;
+}
+
+.today-pick__remove {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  background-color: $whiteTextColor;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 
 .today-pick__name {
@@ -273,7 +308,7 @@ body {
   width: 244px;
   height: 154px;
   border: 1px solid #e1e1e1;
-  background-color: #c4c4c4;
   margin-bottom: 26px;
   object-fit: cover;
+  background-color: #e4e4e4;
 }
