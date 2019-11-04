@@ -1,0 +1,33 @@
+{
+  "name": "time-for-lunch",
+  "version": "1.0.0",
+  "description": "Time for lunch",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev",
+    "start": "next start",
+    "build": "next build"
+  },
+  "keywords": [
+    "lunch-time",
+    "time-for-lunch"
+  ],
+  "author": "Quang Dat Pham <quangdat2000.pham@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@svgr/webpack": "^4.3.3",
+    "@zeit/next-sass": "^1.0.1",
+    "mobx": "^5.14.2",
+    "mobx-react": "^6.1.4",
+    "next": "^9.1.2",
+    "node-sass": "^4.13.0",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "url-loader": "^2.2.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.6.0"
+  }
+}
