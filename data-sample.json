@@ -1,0 +1,81 @@
+{
+  "currentUser": {
+    "fullname": "Quang Dat Pham",
+    "email": "quangdat2000.pham@gmail.com"
+  },
+  "todayPick": 3,
+  "todayMeals": [
+    {
+      "id": 0,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 1,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 2,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 3,
+      "name": "Picked",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 4,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 5,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 6,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 7,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 8,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 9,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 10,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }
+  ],
+  "previousPicks": [
+    {
+      "id": 0,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 1,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 2,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 3,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 4,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }, {
+      "id": 5,
+      "name": "Diam cras pellentesque",
+      "imageSrc": "https://source.unsplash.com/800x640"
+    }
+  ]
+}

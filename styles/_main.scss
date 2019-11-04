@@ -1,5 +1,5 @@
 body {
-  font-family: 'Roboto';
+  font-family: Roboto;
   font-size: 18px;
   color: $normalTextColor;
 }
@@ -91,7 +91,6 @@ body {
   left: 40px;
   height: 21px;
   color: $formInputColor;
-  font-family: 'Roboto';
   font-size: 18px;
   text-transform: uppercase;
 }
@@ -135,7 +134,146 @@ body {
   text-decoration: none;
   margin-left: 4px;
   color: $normalTextColor;
-  font-family: 'Roboto';
   font-size: 18px;
   font-weight: 700;
+}
+
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: $navColor;
+  z-index: 1;
+}
+
+.top-nav-wrapper {
+  height: 100%;
+  max-width: 1244px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.top-nav__logo {
+  flex: 1 1 0;
+  color: $primaryColor;
+  font-family: Staatliches;
+  font-size: 24px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.top-nav__current-user {
+  display: flex;
+  align-items: center;
+}
+
+.top-nav__name {
+  height: 16px;
+  color: $whiteTextColor;
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 16px;
+}
+
+.lunch {
+  margin: auto;
+  margin-top: 110px;
+  max-width: 1244px;
+  display: grid;
+  grid-template-columns: repeat(12, 78px);
+  grid-column-gap: 28px;
+  grid-row-gap: 56px;
+}
+
+.search {
+  grid-column: 1/10;
+  height: 186px;
+}
+
+.search-wrapper {
+  margin-top: 88px;
+  width: 608px;
+  height: 66px;
+  border-radius: 80px;
+  background-color: $primaryColor;
+  position: relative;
+}
+
+.search__label {
+  position: absolute;
+  top: 23px;
+  left: 24px;
+  height: 21px;
+  color: $blurColorFormInput;
+  font-weight: 700;
+}
+
+.search__input {
+  height: 100%;
+  width: 480px;
+  margin-left: 24px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: $whiteTextColor;
+  font-weight: 700;
+}
+
+.search__icon {
+  position: absolute;
+  top: 21px;
+  right: 24px;
+}
+
+.meal {
+  grid-column: span 3;
+  height: 209px;
+}
+
+.meal__image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.meal__name {
+  margin-top: 8px;
+}
+
+.picked {
+  grid-column: span 3/-1;
+  grid-row: 1/-1;
+}
+
+.picked__title {
+  height: 21px;
+  color: #959595;
+  margin-bottom: 12px;
+}
+
+.today-pick {
+  height: 242px;
+}
+
+.today-pick__image {
+  width: 242px;
+  height: 109px;
+  object-fit: cover;
+  background-color: #e4e4e4;
+}
+
+.today-pick__name {
+  margin-top: 8px;
+}
+
+.previous-picks__image {
+  width: 244px;
+  height: 154px;
+  border: 1px solid #e1e1e1;
+  background-color: #c4c4c4;
+  margin-bottom: 26px;
+  object-fit: cover;
 }
