@@ -4,7 +4,16 @@ body {
   color: $normalTextColor;
 }
 
+.lunch-title a {
+  height: 39px;
+  color: $primaryColor;
+  font-family: Staatliches;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
 .title {
+  width: 440px;
   height: 90px;
   color: $primaryColor;
   font-family: Staatliches;
@@ -15,7 +24,7 @@ body {
   align-items: center;
 }
 
-.login-page {
+.form-background {
   background-image: url('/static/images/first-page-bg.png');
   background-size: cover;
   background-position: bottom;
