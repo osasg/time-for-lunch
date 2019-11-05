@@ -16,7 +16,8 @@ class AppState {
       // todayPick: null,
       // previousPicks: [],
       // isLocked: false,
-      // lunchStatus: ''
+      // lunchStatus: '',
+      // isConfirm: false
     });
   }
 
@@ -33,6 +34,10 @@ class AppState {
 
   @action unPickMeal = () => {
     this.todayPick = null;
+  }
+
+  @action confirm = () => {
+    this.isConfirmed = true;
   }
 }
 

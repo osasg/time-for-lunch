@@ -4,8 +4,9 @@
     "email": "quangdat2000.pham@gmail.com"
   },
   "isLocked": false,
-  "lunchStatus": "ORDERING",
-  "todayPick": 3,
+  "lunchStatus": "COMFIRMING",
+  "todayPick": 2,
+  "isConfirmed": false,
   "todayMeals": [
     {
       "id": 0,

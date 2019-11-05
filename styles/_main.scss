@@ -134,6 +134,13 @@ body {
     display: none;
     width: 148px;
   }
+
+  &__confirm-meal {
+    width: 160px;
+    height: 48px;
+    border-radius: 80px;
+    background-color: $primaryColor;
+  }
 }
 
 .create-account {
@@ -208,6 +215,51 @@ body {
 .locked {
   font-size: 48px;
   font-weight: 700;
+}
+
+.confirm {
+  grid-column: 1/10;
+
+  &__message {
+    margin: 30px 0 143px 0;
+    height: 42px;
+    font-size: 36px;
+    font-weight: 400;
+  }
+
+  &__meal {
+    display: flex;
+  }
+
+  &__meal-image {
+    width: 292px;
+    height: 182px;
+    border: 1px solid #e1e1e1;
+    background-color: $loadingColor;
+    background-size: cover;
+    color: transparent;
+  }
+
+  &__meal-answer-tab {
+    margin-left: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__question {
+    margin-bottom: 24px;
+  }
+
+  &__meal-name {
+    color: $primaryColor;
+  }
+
+  &__confirmed {
+    font-size: 24px;
+    color: $primaryColor;
+    font-family: Staatliches;
+  }
 }
 
 .search {
