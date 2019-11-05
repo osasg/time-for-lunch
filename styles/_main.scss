@@ -399,3 +399,121 @@ body {
   object-fit: cover;
   background-color: $loadingColor;
 }
+
+.dashboard-nav {
+  width: 64px;
+  height: 100vh;
+  background-color: $navColor;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  .d-logo {
+    margin-top: 24px;
+    margin-left: 16px;
+    width: 31px;
+    height: 123px;
+    border-radius: 95px;
+    border: 1px solid $primaryColor;
+  }
+
+  .d-logo__chars {
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $primaryColor;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .control {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 304px;
+
+    &__tab {
+      width: 64px;
+      height: 64px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: #333;
+        transform: translateX(8px);
+      }
+    }
+
+    &__tab svg {
+      transform-origin: 0 0;
+      fill: $whiteTextColor;
+    }
+
+    &__tab--current {
+      background-color: #ffffff;
+
+      &:hover {
+        background-color: #ffffff;
+      }
+    }
+  }
+}
+
+.d-layout {
+  margin: 80px 0 0 144px;
+}
+
+.dashboard-index {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.board {
+  width: 388px;
+  height: 248px;
+  margin-right: 80px;
+  margin-bottom: 80px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eef;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: .2s ease;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08),
+      0 4px 26px rgba(0, 0, 0, 0.04);
+  }
+
+  &__name {
+    height: 42px;
+    font-size: 36px;
+    font-weight: 500;
+    color: #4e4e4e;
+    margin-top: 16px;
+    outline: none;
+  }
+
+  &__icon-wrapper {
+    width: 128px;
+    height: 128px;
+  }
+
+  svg {
+    transform: scale($scaleIcon);
+    transform-origin: 0 0;
+  }
+}
