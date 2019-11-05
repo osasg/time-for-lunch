@@ -1,6 +1,6 @@
 import React from 'react';
 import App from 'next/app';
-import { extendObservable } from 'mobx';
+import { extendObservable, action, runInAction } from 'mobx';
 import { Provider } from 'mobx-react';
 
 import '../styles/styles.scss';
@@ -14,8 +14,25 @@ class AppState {
       // currentUser: null,
       // todayMeals: [],
       // todayPick: null,
-      // previousPicks: []
+      // previousPicks: [],
+      // isLocked: false,
+      // lunchStatus: ''
     });
+  }
+
+  @action pickMeal = m_id => {
+    if (this.isLocked)
+      return;
+
+    this.todayPick = m_id;
+    this.lunchStatus = 'LOCKED';
+    setTimeout(() => {
+      runInAction(() => this.lunchStatus = 'ORDERING');
+    }, 1200);
+  }
+
+  @action unPickMeal = () => {
+    this.todayPick = null;
   }
 }
 
