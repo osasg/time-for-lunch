@@ -22,7 +22,7 @@ const Board = ({ name }) => {
   const BoardIcon = icons[name + 'Icon'];
 
   return (
-    <Link href={`${name.toLowerCase()}`}>
+    <Link href={`/admin/${name.toLowerCase()}`}>
       <a className="board" onClick={() => {}}>
         <div className="board__icon-wrapper"><BoardIcon /></div>
         <span className="board__name">{name}</span>
@@ -33,7 +33,7 @@ const Board = ({ name }) => {
 
 const AdminIndex = () => {
   return (
-    <div className="dashboard-index">
+    <div className="admin-index">
       <DashboardNav currentBoard={'Home'} />
       <Board name="Meals"/>
       <Board name="Users"/>
