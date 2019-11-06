@@ -558,12 +558,64 @@ body {
   }
 }
 
-.admin-title {
+.admin-head {
   position: fixed;
   top: 46px;
   left: 144px;
-  height: 56px;
-  margin: 0;
-  font-size: 48px;
-  font-weight: 500;
+  right: 52px;
+  display: flex;
+  align-items: center;
+
+  .admin-title {
+    flex: 1 1 0;
+    height: 56px;
+    margin: 0;
+    font-size: 48px;
+    font-weight: 500;
+  }
+
+  .search-txt {
+    border: none;
+    outline: none;
+    color: $whiteTextColor;
+    background-color: $primaryColor;
+    margin-right: 4px;
+    display: none;
+    width: 0;
+
+    &.open-search {
+      display: block;
+      width: 220px;
+    }
+  }
+
+  .search-btn {
+    width: 46px;
+    height: 46px;
+    background-color: $primaryColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      right: 50%;
+      border-top-left-radius: 80px;
+      border-bottom-left-radius: 80px;
+      content: '';
+      display: block;
+      z-index: -1;
+      background-color: $primaryColor;
+      width: 0;
+      height: 46px;
+      transition: .2s ease;
+    }
+
+    &.open-search:before {
+      width: 272px;
+    }
+  }
 }

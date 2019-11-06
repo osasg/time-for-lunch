@@ -19,10 +19,12 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@svgr/webpack": "^4.3.3",
     "@zeit/next-sass": "^1.0.1",
+    "classnames": "^2.2.6",
     "mobx": "^5.14.2",
     "mobx-react": "^6.1.4",
     "next": "^9.1.2",
     "node-sass": "^4.13.0",
+    "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "url-loader": "^2.2.0"
