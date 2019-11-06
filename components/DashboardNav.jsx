@@ -37,9 +37,11 @@ const Control = ({ currentBoard }) => {
         const BoardIcon = icons[(currentBoard === v ? '' : 'White') + v + 'Icon'];
 
         return (
-          <div key={i} className={`control__tab ${currentBoard === v ? 'control__tab--current' : ''}`}>
-            <BoardIcon />
-          </div>
+          <Link key={i} href={`/admin/${v.toLowerCase()}`}><a>
+            <div className={`control__tab ${currentBoard === v ? 'control__tab--current' : ''}`}>
+              <BoardIcon />
+            </div>
+          </a></Link>
         );
       })}
     </div>
