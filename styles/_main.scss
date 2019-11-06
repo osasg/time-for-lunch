@@ -208,6 +208,7 @@ body {
   max-width: 1244px;
   display: grid;
   grid-template-columns: repeat(12, 78px);
+  grid-template-rows: 156px auto;
   grid-column-gap: 28px;
   grid-row-gap: 56px;
 }
@@ -264,6 +265,7 @@ body {
 
 .search {
   grid-column: 1/10;
+  grid-row: 1/3;
   height: 156px;
 
   &-wrapper {
@@ -400,6 +402,23 @@ body {
   background-color: $loadingColor;
 }
 
+.todaymeals-list {
+  grid-column: 1/10;
+  grid-row: 2/-1;
+  display: flex;
+  flex-wrap: wrap;
+
+  .meal {
+    width: 290px;
+    margin-bottom: 28px;
+    margin-right: 28px;
+
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+  }
+}
+
 .dashboard-nav {
   width: 64px;
   height: 100vh;
@@ -527,10 +546,10 @@ body {
 .admin-todaymeals {
   width: 100%;
   height: 100%;
+  margin-top: 62px;
 }
 
 .resources-list {
-  margin-top: 62px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
