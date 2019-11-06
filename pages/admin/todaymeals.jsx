@@ -6,6 +6,7 @@ import AdminHead from '../../components/AdminHead';
 import MealView from '../../components/MealView';
 import DashboardNav from '../../components/DashboardNav';
 import DashboardLayout from '../../components/DashboardLayout';
+import DashboardMealsSearch from '../../components/DashboardMealsSearch';
 
 import data from '../../data-sample.json';
 
@@ -19,7 +20,20 @@ import data from '../../data-sample.json';
         <div className="admin-todaymeals">
           <DashboardNav currentBoard="TodayMeals" />
           <AdminHead headName="Today Meals" searchable={false} />
-          <div className="">
+          <div className="select-meal">
+            <DashboardMealsSearch meals={this.props.meals}/>
+          </div>
+          <div className="render-meals">
+            {this.todayMeals.map(m =>
+              <div className="today-pick">
+                <div className="picked__title">Today pick</div>
+                <div className="today-pick__image-wrapper">
+                  <img className="today-pick__image" src={m.imageSrc} alt="Picked meal image" />
+                  <div className="today-pick__remove"><RemoveIcon /></div>
+                </div>
+                <div className="today-pick__name">{m.name}</div>
+              </div>
+            )}
           </div>
         </div>
       </DashboardLayout>

@@ -141,6 +141,13 @@ body {
     border-radius: 80px;
     background-color: $primaryColor;
   }
+
+  &__lunch-status {
+    width: 160px;
+    height: 48px;
+    border-radius: 80px;
+    background-color: $primaryColor;
+  }
 }
 
 .create-account {
@@ -268,10 +275,11 @@ body {
   grid-row: 1/3;
   height: 156px;
 
+  .search-wrapper { margin-top: 58px; }
+
   &-wrapper {
-    margin-top: 58px;
     width: 608px;
-    height: 66px;
+    height: 48px;
     border-radius: 80px;
     background-color: $primaryColor;
     position: relative;
@@ -279,7 +287,7 @@ body {
 
   &__label {
     position: absolute;
-    top: 23px;
+    top: 15px;
     left: 24px;
     height: 21px;
     color: $blurColorFormInput;
@@ -299,7 +307,7 @@ body {
 
   &__icon {
     position: absolute;
-    top: 21px;
+    top: 12px;
     right: 24px;
   }
 }
@@ -715,4 +723,44 @@ body {
     &--lock { background-color: #fec123; }
     &--remove { background-color: #f92c00; }
   }
+}
+
+.d-meals-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+
+  .dms-search {
+    position: relative;
+  }
+
+  .dms-search__list {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: -1;
+    width: calc(100% - 4px);
+    padding-top: 24px;
+  }
+
+  .dms-search__name {
+    padding: 8px 0;
+    padding-left: 24px;
+    border-right: 2px solid $primaryColor;
+    border-left: 2px solid $primaryColor;
+    border-radius: 46%;
+  }
+
+  .dms-search__name:last-child {
+    padding-bottom: 12px;
+
+    border-bottom-left-radius: 80px;
+    border-bottom-right-radius: 80px;
+    border-bottom: 2px solid $primaryColor;
+  }
+}
+
+.hidden {
+  display: none;
 }
