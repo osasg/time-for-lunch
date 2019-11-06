@@ -26,18 +26,24 @@ import SearchIcon from '../static/icons/search.svg';
   }
 
   componentDidMount = () => {
-    this.searchTxt.current.addEventListener("keyup", () => this.searchBtn.current.click());
+    if (this.searchTxt.current)
+      this.searchTxt.current.addEventListener("keyup", () => this.searchBtn.current.click());
   }
 
   render() {
-    const { headName, searchStr } = this.props;
+    const { headName, searchStr, searchable = true } = this.props;
     return (
       <div className="admin-head">
         <h1 className="admin-title">{headName}</h1>
-        <input ref={this.searchTxt} className="search-txt" type="text" defaultValue={searchStr} />
-        <div ref={this.searchBtn} className="search-btn" onClick={this.handleToggleSearch}>
-          <SearchIcon />
-        </div>
+        {
+          searchable
+          && <>
+            <input ref={this.searchTxt} className="search-txt" type="text" defaultValue={searchStr} />
+            <div ref={this.searchBtn} className="search-btn" onClick={this.handleToggleSearch}>
+              <SearchIcon />
+            </div>
+          </>
+        }
       </div>
     );
   }
