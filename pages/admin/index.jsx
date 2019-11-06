@@ -4,11 +4,11 @@ import Link from 'next/link';
 import withDashboardLayout from '../../components/WithDashboardLayout';
 import DashboardNav from '../../components/DashboardNav';
 
-import MealsIcon from '../../static/icons/meals.svg';
-import UsersIcon from '../../static/icons/users.svg';
-import TodayMealsIcon from '../../static/icons/today-meals.svg';
-import AnalystIcon from '../../static/icons/analyst.svg';
-import DeliveryIcon from '../../static/icons/delivery.svg';
+import MealsIcon from '../../public/icons/meals.svg';
+import UsersIcon from '../../public/icons/users.svg';
+import TodayMealsIcon from '../../public/icons/today-meals.svg';
+import AnalystIcon from '../../public/icons/analyst.svg';
+import DeliveryIcon from '../../public/icons/delivery.svg';
 
 const icons = {
   MealsIcon,

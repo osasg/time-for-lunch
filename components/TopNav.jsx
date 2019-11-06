@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { inject, observer } from 'mobx-react';
 
-import AvatarIcon from '../static/icons/avatar.svg';
+import AvatarIcon from '../public/icons/avatar.svg';
 
 export default inject(['appState'])(observer(({ appState }) => {
   const { currentUser } = appState;

@@ -5,8 +5,8 @@ import { observable, action } from 'mobx';
 
 import withFormBackground from '../components/WithFormBackground';
 
-import UsernameIcon from '../static/icons/username.svg';
-import PasswordIcon from '../static/icons/password.svg';
+import UsernameIcon from '../public/icons/username.svg';
+import PasswordIcon from '../public/icons/password.svg';
 
 class SignUpState {
   @observable username = '';

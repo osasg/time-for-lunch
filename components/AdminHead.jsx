@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 
-import SearchIcon from '../static/icons/search.svg';
+import SearchIcon from '../public/icons/search.svg';
 
 @observer class AdminHead extends React.Component {
   constructor(props) {

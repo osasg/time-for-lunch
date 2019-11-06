@@ -2,19 +2,19 @@ import React from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-import WhiteHomeIcon from '../static/icons/white-home.svg';
-import WhiteMealsIcon from '../static/icons/white-meals.svg';
-import WhiteUsersIcon from '../static/icons/white-users.svg';
-import WhiteTodayMealsIcon from '../static/icons/white-today-meals.svg';
-import WhiteAnalystIcon from '../static/icons/white-analyst.svg';
-import WhiteDeliveryIcon from '../static/icons/white-delivery.svg';
+import WhiteHomeIcon from '../public/icons/white-home.svg';
+import WhiteMealsIcon from '../public/icons/white-meals.svg';
+import WhiteUsersIcon from '../public/icons/white-users.svg';
+import WhiteTodayMealsIcon from '../public/icons/white-today-meals.svg';
+import WhiteAnalystIcon from '../public/icons/white-analyst.svg';
+import WhiteDeliveryIcon from '../public/icons/white-delivery.svg';
 
-import HomeIcon from '../static/icons/home.svg';
-import MealsIcon from '../static/icons/meals.svg';
-import UsersIcon from '../static/icons/users.svg';
-import TodayMealsIcon from '../static/icons/today-meals.svg';
-import AnalystIcon from '../static/icons/analyst.svg';
-import DeliveryIcon from '../static/icons/delivery.svg';
+import HomeIcon from '../public/icons/home.svg';
+import MealsIcon from '../public/icons/meals.svg';
+import UsersIcon from '../public/icons/users.svg';
+import TodayMealsIcon from '../public/icons/today-meals.svg';
+import AnalystIcon from '../public/icons/analyst.svg';
+import DeliveryIcon from '../public/icons/delivery.svg';
 
 const icons = {
   WhiteHomeIcon,

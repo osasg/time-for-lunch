@@ -6,9 +6,9 @@ import DashboardLayout from '../../components/DashboardLayout';
 import DashboardNav from '../../components/DashboardNav';
 import AdminHead from '../../components/AdminHead';
 
-import WhiteLockedIcon from '../../static/icons/white-locked.svg';
-import WhiteUnlockedIcon from '../../static/icons/white-unlocked.svg';
-import WhiteRemoveIcon from '../../static/icons/white-remove.svg';
+import WhiteLockedIcon from '../../public/icons/white-locked.svg';
+import WhiteUnlockedIcon from '../../public/icons/white-unlocked.svg';
+import WhiteRemoveIcon from '../../public/icons/white-remove.svg';
 
 import data from '../../data-sample.json';
 

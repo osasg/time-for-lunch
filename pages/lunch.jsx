@@ -4,8 +4,9 @@ import { observable, action, runInAction } from 'mobx';
 
 import TopNav from '../components/TopNav';
 import MealView from '../components/MealView';
-import SearchIcon from '../static/icons/search.svg';
-import RemoveIcon from '../static/icons/remove.svg';
+
+import SearchIcon from '../public/icons/search.svg';
+import RemoveIcon from '../public/icons/remove.svg';
 
 const searchState = observable({
   text: ''
