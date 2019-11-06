@@ -16,7 +16,7 @@ import SearchIcon from '../static/icons/search.svg';
 
   @action handleToggleSearch = e => {
     if (e.currentTarget.classList.contains('open-search'))
-      return this.props.handleFilterMeals(this.searchTxt.current.value);
+      return this.props.handleFilterResources(this.searchTxt.current.value);
 
     e.currentTarget.classList.add('open-search');
     setTimeout(() =>
@@ -44,9 +44,9 @@ import SearchIcon from '../static/icons/search.svg';
 };
 
 AdminHead.propTypes = {
-  adminHead: PropTypes.string.isRequired,
+  headName: PropTypes.string.isRequired,
   searchStr: PropTypes.string,
-  handleFilterMeals: PropTypes.func
+  handleFilterResources: PropTypes.func
 }
 
 export default AdminHead;

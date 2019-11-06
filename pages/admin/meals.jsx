@@ -31,9 +31,9 @@ import data from '../../data-sample.json';
     return (
       <DashboardLayout>
         <div className="admin-meals">
-          <DashboardNav />
-          <AdminHead headName="Meals" handleFilterMeals={handleFilterMeals} searchStr={searchStr} />
-          <div className="meals-list">
+          <DashboardNav currentBoard="Meals" />
+          <AdminHead headName="Meals" handleFilterResources={handleFilterMeals} searchStr={searchStr} />
+          <div className="meals-list resources-list">
             {filteredMeals.map((meal, i) =>
               <MealView key={i} meal={meal} handleOnClick={() => {}} />
             )}

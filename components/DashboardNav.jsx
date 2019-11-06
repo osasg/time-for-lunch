@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
 
 import WhiteHomeIcon from '../static/icons/white-home.svg';
 import WhiteMealsIcon from '../static/icons/white-meals.svg';
@@ -63,6 +64,10 @@ const DashboardNav = ({ currentBoard }) => {
       <Control currentBoard={currentBoard} />
     </div>
   );
+}
+
+DashboardNav.propTypes = {
+  currentBoard: PropTypes.oneOf(['Home', 'Meals', 'Users', 'TodayMeals', 'Analyst','Delivery']).isRequired
 }
 
 export default DashboardNav;
