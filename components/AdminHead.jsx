@@ -30,10 +30,10 @@ import SearchIcon from '../static/icons/search.svg';
   }
 
   render() {
-    const { searchStr } = this.props;
+    const { headName, searchStr } = this.props;
     return (
       <div className="admin-head">
-        <h1 className="admin-title">Meals</h1>
+        <h1 className="admin-title">{headName}</h1>
         <input ref={this.searchTxt} className="search-txt" type="text" defaultValue={searchStr} />
         <div ref={this.searchBtn} className="search-btn" onClick={this.handleToggleSearch}>
           <SearchIcon />
@@ -44,6 +44,7 @@ import SearchIcon from '../static/icons/search.svg';
 };
 
 AdminHead.propTypes = {
+  adminHead: PropTypes.string.isRequired,
   searchStr: PropTypes.string,
   handleFilterMeals: PropTypes.func
 }

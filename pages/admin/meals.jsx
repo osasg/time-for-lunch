@@ -1,47 +1,53 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { observable, extendObservable, action } from 'mobx';
+import { observable, extendObservable, action, runInAction } from 'mobx';
 
 import AdminHead from '../../components/AdminHead';
 import MealView from '../../components/MealView';
 import DashboardNav from '../../components/DashboardNav';
-import withDashboadLayout from '../../components/WithDashboardLayout';
+import DashboardLayout from '../../components/DashboardLayout';
 
 import data from '../../data-sample.json';
 
-class AdminMealsState {
-  constructor({ meals, filterMeals }) {
-    extendObservable(this, {
-      searchStr: '',
-      meals: data.todayMeals,
-      filterMeals: data.todayMeals
-    });
-  }
+@observer class AdminMeals extends React.Component {
+  @observable searchStr = '';
+  @observable filteredMeals = data.todayMeals;
 
   @action handleFilterMeals = str => {
     const strToFilter = str.toLowerCase().split(/\s/).join('');
-    this.filterMeals = this.meals.filter(m =>
+    this.filteredMeals = this.props.meals.filter(m =>
       m.name.toLowerCase().split(/\s/).join('').includes(strToFilter));
+  }
+
+  componentDidMount() {
+    runInAction(() => {
+      const { meals, filteredMeals } = this.props;
+      this.filteredMeals = meals;
+    });
+  }
+
+  render() {
+    const { searchStr, filteredMeals, handleFilterMeals } = this;
+    return (
+      <DashboardLayout>
+        <div className="admin-meals">
+          <DashboardNav />
+          <AdminHead headName="Meals" handleFilterMeals={handleFilterMeals} searchStr={searchStr} />
+          <div className="meals-list">
+            {filteredMeals.map((meal, i) =>
+              <MealView key={i} meal={meal} handleOnClick={() => {}} />
+            )}
+          </div>
+        </div>
+      </DashboardLayout>
+    );
   }
 }
 
-const adminMealsState = observable(new AdminMealsState({
-  meals: data.todayMeals,
-  filterMeals: data.todayMeals
-}));
+AdminMeals.getInitialProps = async () => {
+  return {
+    meals: data.todayMeals
+  };
+}
 
-const AdminMeals = observer(() => {
-  return (
-    <div className="admin-meals">
-      <DashboardNav />
-      <AdminHead handleFilterMeals={adminMealsState.handleFilterMeals} searchStr={adminMealsState.searchStr} />
-      <div className="meals-list">
-        {adminMealsState.filterMeals.map((meal, i) =>
-          <MealView key={i} meal={meal} handleOnClick={() => {}} />
-        )}
-      </div>
-    </div>
-  );
-});
-
-export default withDashboadLayout(() => <AdminMeals />);
+export default AdminMeals;
