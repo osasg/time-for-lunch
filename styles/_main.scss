@@ -156,6 +156,16 @@ body {
     font-weight: 700;
     width: auto;
   }
+
+  &--update {
+    width: auto;
+    height: 48px;
+    border-radius: 80px;
+    background-color: #0bb3e9;
+    padding-left: 36px;
+    padding-right: 36px;
+    font-size: 14px;
+  }
 }
 
 .create-account {
@@ -873,6 +883,55 @@ body {
       width: 105px;
       height: 1px;
       border-bottom: 1px solid $normalTextColor;
+    }
+  }
+}
+
+.profile {
+  display: grid;
+  grid-template-columns: repeat(12, 78px);
+  grid-column-gap: 28px;
+  margin: auto;
+  margin-top: 192px;
+  max-width: 1244px;
+
+  label {
+    padding-top: 12px;
+    display: block;
+  }
+
+  p {
+    margin-bottom: 8px;
+  }
+
+  .p-avatar {
+    grid-column: 1/5;
+
+    &__image {
+      width: 290px;
+      height: 290px;
+      border-radius: 50%;
+    }
+
+    .btn--update {
+      margin-top: 16px;
+      margin-left: 36px;
+    }
+  }
+
+  .p-profile {
+    grid-column: 5/9;
+
+    .btn--update {
+      margin-top: 42px;
+    }
+  }
+
+  .p-password {
+    grid-column: span 4;
+
+    .btn--update {
+      margin-top: 42px;
     }
   }
 }

@@ -1,7 +1,8 @@
 {
   "currentUser": {
     "fullname": "Quang Dat Pham",
-    "email": "quangdat2000.pham@gmail.com"
+    "email": "quangdat2000.pham@gmail.com",
+    "avatarUrl": "https://source.unsplash.com/800x640"
   },
   "isLocked": false,
   "lunchStatus": "ORDERING",
