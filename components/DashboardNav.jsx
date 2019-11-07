@@ -52,15 +52,19 @@ const Control = ({ currentBoard }) => {
 const DashboardNav = ({ currentBoard }) => {
   return (
     <div className="dashboard-nav">
-      <div className="d-logo">
-        <div className="d-logo__chars">
-          <span>L</span>
-          <span>U</span>
-          <span>N</span>
-          <span>C</span>
-          <span>H</span>
-        </div>
-      </div>
+      <Link href="/lunch">
+        <a>
+          <div className="d-logo">
+            <div className="d-logo__chars">
+              <span>L</span>
+              <span>U</span>
+              <span>N</span>
+              <span>C</span>
+              <span>H</span>
+            </div>
+          </div>
+        </a>
+      </Link>
       <Control currentBoard={currentBoard} />
     </div>
   );

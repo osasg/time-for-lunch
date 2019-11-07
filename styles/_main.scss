@@ -190,7 +190,7 @@ body {
   }
 
   &__logo {
-    flex: 1 1 0;
+    // flex: 1 1 0;
     font-family: Staatliches;
     font-size: 24px;
     font-weight: 400;
@@ -200,6 +200,18 @@ body {
   &__logo a {
     color: $primaryColor;
     text-decoration: none;
+  }
+
+  &__admin-link a {
+    text-decoration: none;
+    color: $whiteTextColor;
+    margin-left: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &__current-user {
+    margin-left: auto;
   }
 
   &__current-user a {
@@ -743,7 +755,6 @@ body {
 
 .d-meals-search {
   display: flex;
-  // justify-content: space-between;
   align-items: center;
   height: 48px;
   position: fixed;
@@ -758,13 +769,15 @@ body {
   }
 
   .dms-search__list {
+    width: 608px;
+    max-height: 480px;
     position: absolute;
     top: 100%;
     left: 0;
-    width: 100%;
     z-index: 1;
     background-color: rgba(255,255,255, .9);
     border-radius: 24px;
+    overflow-y: scroll;
   }
 
   .dms-search__name {

@@ -13,6 +13,9 @@ export default inject(['appState'])(observer(({ appState }) => {
         <div className="top-nav__logo">
           <Link href="/lunch"><a>Time for lunch</a></Link>
         </div>
+        <div className="top-nav__admin-link">
+          <Link href="/admin"><a>Admin</a></Link>
+        </div>
         <div className="top-nav__current-user">
           <Link href="/profile">
             <a>
