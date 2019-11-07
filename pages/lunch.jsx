@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { observable, action, runInAction } from 'mobx';
+import classnames from 'classnames';
 
 import TopNav from '../components/TopNav';
 import MealView from '../components/MealView';
@@ -22,7 +23,6 @@ class Lunch extends React.Component {
   componentDidMount() {
     runInAction(() => {
       this.filteredMeals = this.props.appState.todayMeals;
-      console.log(this.filteredMeals, this.props.appState.todayMeals)
     });
   }
 
@@ -110,19 +110,11 @@ class Lunch extends React.Component {
             )}
           </div>
         </div>
-        <div className="todaymeals-list">
+        <div className={classnames({ "todaymeals-list": true, "half-opacity": lunchStatus === 'LOCKED' })}>
           {!isLocked && this.filteredMeals.map((meal, i) =>
             <MealView key={i} meal={meal} handleOnClick={() => pickMeal(meal.id)}/>
           )}
         </div>
-        {
-          lunchStatus === 'LOCKED'
-          && <style jsx global>{`
-            .meal {
-              opacity: .5;
-            }
-          `}</style>
-        }
       </div>
     );
   }

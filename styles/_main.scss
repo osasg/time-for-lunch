@@ -218,6 +218,11 @@ body {
   grid-template-rows: 156px auto;
   grid-column-gap: 28px;
   grid-row-gap: 56px;
+
+  .today-pick__image-wrapper {
+    width: 244px;
+    height: 108px;
+  }
 }
 
 .locked {
@@ -365,11 +370,12 @@ body {
 }
 
 .today-pick {
-  height: 212px;
+  width: 290px;
+  height: 210px;
 
   &__image-wrapper {
-    width: 242px;
-    height: 109px;
+    width: 290px;
+    height: 180px;
     position: relative;
     background-color: $primaryColor;
   }
@@ -415,6 +421,7 @@ body {
   grid-row: 2/-1;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
 
   .meal {
     width: 290px;
@@ -496,7 +503,8 @@ body {
 }
 
 .d-layout {
-  padding: 80px 0 0 144px;
+  margin: 80px 0 0 64px;
+  padding-left: 80px;
   height: calc(100vh - 80px);
   overflow: hidden;
   overflow-x: scroll;
@@ -730,6 +738,11 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 48px;
+  position: fixed;
+  top: 168px;
+  left: 144px;
+  width: 1244px;
+  z-index: 1;
 
   .dms-search {
     position: relative;
@@ -737,30 +750,74 @@ body {
 
   .dms-search__list {
     position: absolute;
-    top: 50%;
+    top: 100%;
     left: 0;
-    z-index: -1;
-    width: calc(100% - 4px);
-    padding-top: 24px;
+    width: 100%;
+    z-index: 1;
+    background-color: rgba(255,255,255, .9);
+    border-radius: 24px;
   }
 
   .dms-search__name {
-    padding: 8px 0;
-    padding-left: 24px;
+    padding: 12px 56px 12px 24px;
     border-right: 2px solid $primaryColor;
     border-left: 2px solid $primaryColor;
     border-radius: 46%;
+    display: flex;
   }
 
   .dms-search__name:last-child {
     padding-bottom: 12px;
-
     border-bottom-left-radius: 80px;
     border-bottom-right-radius: 80px;
     border-bottom: 2px solid $primaryColor;
+  }
+
+  .dms-search__name > *:first-child {
+    flex: 1 1 0;
+  }
+
+  .dms-search__name > *:last-child {
+    background-color: $primaryColor;
+    color: $whiteTextColor;
+    padding: 2px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
   }
 }
 
 .hidden {
   display: none;
+}
+
+.half-opacity {
+  opacity: .5;
+}
+
+.render-meals {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: flex-start;
+  height: 476px;
+  margin-top: 278px;
+  z-index: -1;
+
+  .today-pick {
+    margin-right: 28px;
+    margin-bottom: 56px;
+  }
+
+  .today-pick:nth-child(2n) {
+    margin-bottom: 0;
+  }
+}
+
+.not-found-page {
+  height: 100vh;
+  width: 628px;
+  text-align: center;
+  margin: auto;
+  margin-top: 164px;
 }

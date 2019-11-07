@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 
 import SearchBox from './SearchBox';
 
-import SearchIcon from '../public/icons/search.svg';
-
 @observer class DashboardMealsSearch extends React.Component {
   @observable searchStr = '';
-  @observable filteredMeals = [];
+  @observable filteredMeals = this.props.meals;
+  @observable mousePoint = null;
+
   searchList = React.createRef();
+  dmsSearch = React.createRef();
 
   @action handleSearch = str => {
     if (!str) {
@@ -26,16 +27,42 @@ import SearchIcon from '../public/icons/search.svg';
       m.name.toLowerCase().split(/\s/).join('').includes(strToFilter));
   }
 
+  @action handleMouseUpAndDown = e => {
+
+  }
+
+  hiddenSearchList = e => {
+    this.searchList.current.classList.remove('hidden');
+    e.stopPropagation();
+  }
+
+  visibleSearchList = e => {
+    this.searchList.current.classList.add('hidden');
+  }
+
+  componentDidMount() {
+    window.addEventListener('click', this.visibleSearchList);
+  }
+
+  componentWillUnmount() {
+    console.log('remove');
+    window.removeEventListener('click', this.visibleSearchList);
+  }
+
   render() {
     return (
       <div className="d-meals-search">
-        <div className="dms-search">
+        <div ref={this.dmsSearch} className="dms-search" onClick={this.hiddenSearchList}>
           <SearchBox handleSearch={this.handleSearch} />
           <div ref={this.searchList} className="dms-search__list hidden">
             {this.filteredMeals.length > 0
               ? this.filteredMeals.map(m =>
-                <div className="dms-search__name">{m.name}</div>)
-              : <div className="dms-search__name">NOT FOUND</div>
+                  <div key={m.id} className="dms-search__name">
+                    <div>{m.name}</div>
+                    <div className="dms-search__add" onClick={() => this.props.handleAddTodayMeal(m.id)}>Add</div>
+                  </div>
+                )
+              : <div className="dms-search__name">- - - - - -</div>
             }
           </div>
         </div>
@@ -46,7 +73,8 @@ import SearchIcon from '../public/icons/search.svg';
 }
 
 DashboardMealsSearch.propTypes = {
-  meals: PropTypes.array.isRequired
+  meals: PropTypes.array.isRequired,
+  handleAddTodayMeal: PropTypes.func.isRequired
 }
 
 export default DashboardMealsSearch;

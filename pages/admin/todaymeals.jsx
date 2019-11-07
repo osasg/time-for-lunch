@@ -10,9 +10,20 @@ import DashboardMealsSearch from '../../components/DashboardMealsSearch';
 
 import data from '../../data-sample.json';
 
+import RemoveIcon from '../../public/icons/remove.svg';
+
 @observer class AdminTodayMeals extends React.Component {
-  @observable todayMeals = [];
+  @observable todayMeals = this.props.meals;
   @observable status = '';
+
+  @action addTodayMeal = id => {
+    if (!this.todayMeals.find(m => m.id === id))
+      this.todayMeals.push(this.props.meals.find(m => m.id === id));
+  }
+
+  @action removeTodayMeal = id => {
+    this.todayMeals = this.todayMeals.filter(m => m.id !== id);
+  }
 
   render() {
     return (
@@ -21,15 +32,14 @@ import data from '../../data-sample.json';
           <DashboardNav currentBoard="TodayMeals" />
           <AdminHead headName="Today Meals" searchable={false} />
           <div className="select-meal">
-            <DashboardMealsSearch meals={this.props.meals}/>
+            <DashboardMealsSearch meals={this.props.meals} handleAddTodayMeal={this.addTodayMeal} />
           </div>
           <div className="render-meals">
             {this.todayMeals.map(m =>
-              <div className="today-pick">
-                <div className="picked__title">Today pick</div>
+              <div key={m.id} className="today-pick">
                 <div className="today-pick__image-wrapper">
                   <img className="today-pick__image" src={m.imageSrc} alt="Picked meal image" />
-                  <div className="today-pick__remove"><RemoveIcon /></div>
+                  <div className="today-pick__remove" onClick={() => this.removeTodayMeal(m.id)}><RemoveIcon /></div>
                 </div>
                 <div className="today-pick__name">{m.name}</div>
               </div>
