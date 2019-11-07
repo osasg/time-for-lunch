@@ -12,9 +12,15 @@ import data from '../../data-sample.json';
 
 import RemoveIcon from '../../public/icons/remove.svg';
 
+const statuses = {
+  PREPARING: 'PREPARING',
+  PICKING: 'PICKING',
+  COOKING: 'COOKING'
+}
+
 @observer class AdminTodayMeals extends React.Component {
   @observable todayMeals = this.props.meals;
-  @observable status = '';
+  @observable lunchStatus = statuses.PICKING;
 
   @action addTodayMeal = id => {
     if (!this.todayMeals.find(m => m.id === id))
@@ -26,6 +32,41 @@ import RemoveIcon from '../../public/icons/remove.svg';
   }
 
   render() {
+    const PreparingMealsList = () =>
+      <div className="render-meals">
+        {this.todayMeals.map(m =>
+          <div key={m.id} className="today-pick">
+            <div className="today-pick__image-wrapper">
+              <img className="today-pick__image" src={m.imageSrc} alt="Picked meal image" />
+              <div className="today-pick__remove" onClick={() => this.removeTodayMeal(m.id)}><RemoveIcon /></div>
+            </div>
+            <div className="today-pick__name">{m.name}</div>
+          </div>
+        )}
+      </div>;
+
+    const PickedMealsList = () =>
+      <div className="render-meals">
+        {this.props.pickedMeals.map(m =>
+          <div key={m.id} className="picked-meal">
+            <div className="picked-meal__quantity">{m.quantity}</div>
+            <div className="picked-meal__name">{m.name}</div>
+          </div>
+        )}
+      </div>
+    ;
+    let renderMeals;
+
+    switch (this.lunchStatus) {
+      case statuses.PREPARING:
+        renderMeals = <PreparingMealsList />;
+        break;
+      case statuses.PICKING:
+      case statuses.COOKING:
+        renderMeals = <PickedMealsList />;
+        break;
+    }
+
     return (
       <DashboardLayout>
         <div className="admin-todaymeals">
@@ -34,17 +75,7 @@ import RemoveIcon from '../../public/icons/remove.svg';
           <div className="select-meal">
             <DashboardMealsSearch meals={this.props.meals} handleAddTodayMeal={this.addTodayMeal} />
           </div>
-          <div className="render-meals">
-            {this.todayMeals.map(m =>
-              <div key={m.id} className="today-pick">
-                <div className="today-pick__image-wrapper">
-                  <img className="today-pick__image" src={m.imageSrc} alt="Picked meal image" />
-                  <div className="today-pick__remove" onClick={() => this.removeTodayMeal(m.id)}><RemoveIcon /></div>
-                </div>
-                <div className="today-pick__name">{m.name}</div>
-              </div>
-            )}
-          </div>
+          {renderMeals}
         </div>
       </DashboardLayout>
     );
@@ -52,7 +83,10 @@ import RemoveIcon from '../../public/icons/remove.svg';
 }
 
 AdminTodayMeals.getInitialProps = async () => {
-  return { meals: data.todayMeals };
+  return {
+    meals: data.todayMeals,
+    pickedMeals: data.todayMeals.map(m => ({ ...m, quantity: Math.floor(Math.random() * 10) }))
+  };
 }
 
 export default AdminTodayMeals;

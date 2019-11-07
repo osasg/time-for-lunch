@@ -45,7 +45,6 @@ import SearchBox from './SearchBox';
   }
 
   componentWillUnmount() {
-    console.log('remove');
     window.removeEventListener('click', this.visibleSearchList);
   }
 

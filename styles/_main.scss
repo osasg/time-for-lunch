@@ -821,3 +821,36 @@ body {
   margin: auto;
   margin-top: 164px;
 }
+
+.picked-meal {
+  width: 317px;
+  margin-bottom: 60px;
+
+  &__quantity {
+    width: 105px;
+    height: 105px;
+    background-color: $primaryColor;
+    color: $whiteTextColor;
+    font-size: 72px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__name {
+    padding-top: 16px;
+    position: relative;
+
+    &:before {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      display: block;
+      content: '';
+      width: 105px;
+      height: 1px;
+      border-bottom: 1px solid #000000;
+    }
+  }
+}
