@@ -65,7 +65,10 @@ import SearchBox from './SearchBox';
             }
           </div>
         </div>
-        <button className="btn btn__lunch-status">Lunch</button>
+        <button className="btn btn--cancel" onClick={() => this.props.handleUpdateStatus(-1)}>Cancel</button>
+        <button className="btn btn__lunch-status" onClick={() => this.props.handleUpdateStatus(1)}>
+          {{ PREPARING: 'READY', PICKING: 'COOK', COOKING: 'DELIVERY', DELIVERING: 'DELIVERING' }[this.props.lunchStatus]}
+        </button>
       </div>
     );
   }
@@ -73,7 +76,8 @@ import SearchBox from './SearchBox';
 
 DashboardMealsSearch.propTypes = {
   meals: PropTypes.array.isRequired,
-  handleAddTodayMeal: PropTypes.func.isRequired
+  handleAddTodayMeal: PropTypes.func.isRequired,
+  handleUpdateStatus: PropTypes.func.isRequired
 }
 
 export default DashboardMealsSearch;

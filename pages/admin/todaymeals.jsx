@@ -15,12 +15,15 @@ import RemoveIcon from '../../public/icons/remove.svg';
 const statuses = {
   PREPARING: 'PREPARING',
   PICKING: 'PICKING',
-  COOKING: 'COOKING'
+  COOKING: 'COOKING',
+  DELIVERING: 'DELIVERING'
 }
 
+const numberStatuses = [ statuses.PREPARING, statuses.PICKING, statuses.COOKING, statuses.DELIVERING ];
+
 @observer class AdminTodayMeals extends React.Component {
-  @observable todayMeals = this.props.meals;
-  @observable lunchStatus = statuses.PICKING;
+  @observable todayMeals = [];
+  @observable lunchStatus = this.props.lunchStatus;
 
   @action addTodayMeal = id => {
     if (!this.todayMeals.find(m => m.id === id))
@@ -31,8 +34,15 @@ const statuses = {
     this.todayMeals = this.todayMeals.filter(m => m.id !== id);
   }
 
+  @action handleUpdateStatus = n => {
+    if (this.lunchStatus === statuses.DELIVERING)
+      return;
+
+    this.lunchStatus = numberStatuses[numberStatuses.indexOf(this.lunchStatus) + n];
+  }
+
   render() {
-    const PreparingMealsList = () =>
+    const PreparingMealsList = observer(() =>
       <div className="render-meals">
         {this.todayMeals.map(m =>
           <div key={m.id} className="today-pick">
@@ -43,9 +53,10 @@ const statuses = {
             <div className="today-pick__name">{m.name}</div>
           </div>
         )}
-      </div>;
+      </div>
+    );
 
-    const PickedMealsList = () =>
+    const PickedMealsList = observer(() =>
       <div className="render-meals">
         {this.props.pickedMeals.map(m =>
           <div key={m.id} className="picked-meal">
@@ -54,7 +65,8 @@ const statuses = {
           </div>
         )}
       </div>
-    ;
+    );
+
     let renderMeals;
 
     switch (this.lunchStatus) {
@@ -73,7 +85,12 @@ const statuses = {
           <DashboardNav currentBoard="TodayMeals" />
           <AdminHead headName="Today Meals" searchable={false} />
           <div className="select-meal">
-            <DashboardMealsSearch meals={this.props.meals} handleAddTodayMeal={this.addTodayMeal} />
+            <DashboardMealsSearch
+              lunchStatus={this.lunchStatus}
+              meals={this.props.meals}
+              handleAddTodayMeal={this.addTodayMeal}
+              handleUpdateStatus={this.handleUpdateStatus}
+            />
           </div>
           {renderMeals}
         </div>
@@ -84,6 +101,7 @@ const statuses = {
 
 AdminTodayMeals.getInitialProps = async () => {
   return {
+    lunchStatus: statuses.PREPARING,
     meals: data.todayMeals,
     pickedMeals: data.todayMeals.map(m => ({ ...m, quantity: Math.floor(Math.random() * 10) }))
   };

@@ -148,6 +148,14 @@ body {
     border-radius: 80px;
     background-color: $primaryColor;
   }
+
+  &--cancel {
+    background-color: transparent;
+    text-transform: none;
+    color: $normalTextColor;
+    font-weight: 700;
+    width: auto;
+  }
 }
 
 .create-account {
@@ -735,7 +743,7 @@ body {
 
 .d-meals-search {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
   height: 48px;
   position: fixed;
@@ -746,6 +754,7 @@ body {
 
   .dms-search {
     position: relative;
+    flex: 1 1 0;
   }
 
   .dms-search__list {
@@ -850,7 +859,7 @@ body {
       content: '';
       width: 105px;
       height: 1px;
-      border-bottom: 1px solid #000000;
+      border-bottom: 1px solid $normalTextColor;
     }
   }
 }
