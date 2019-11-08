@@ -1,13 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { observable, extendObservable, action, runInAction } from 'mobx';
+import Link from 'next/link';
 
-import AdminHead from '../../components/AdminHead';
-import MealView from '../../components/MealView';
-import DashboardNav from '../../components/DashboardNav';
-import DashboardLayout from '../../components/DashboardLayout';
+import AdminHead from '../../../components/AdminHead';
+import MealView from '../../../components/MealView';
+import DashboardNav from '../../../components/DashboardNav';
+import DashboardLayout from '../../../components/DashboardLayout';
 
-import data from '../../data-sample.json';
+import data from '../../../data-sample.json';
 
 @observer class AdminMeals extends React.Component {
   @observable searchStr = '';
@@ -35,7 +36,9 @@ import data from '../../data-sample.json';
           <AdminHead headName="Meals" handleFilterResources={handleFilterMeals} searchStr={searchStr} />
           <div className="meals-list resources-list">
             {filteredMeals.map((meal, i) =>
-              <MealView key={i} meal={meal} handleOnClick={() => {}} />
+              <Link key={i} href={`/admin/meals/${meal.id}`}>
+                <a><MealView meal={meal} handleOnClick={() => {}} /></a>
+              </Link>
             )}
           </div>
         </div>
