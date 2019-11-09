@@ -4,6 +4,7 @@ const co = require('co');
 const next = require('next');
 
 const config = require('./config/');
+const repositories = require('./repositories/');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -13,6 +14,7 @@ co(function * () {
   yield app.prepare();
 
   const { db } = yield config.initialize();
+  const repos = yield repositories.initialize({ db });
 
   const server = express();
   server.use(bodyParser.urlencoded({ extended: false }));
@@ -20,11 +22,12 @@ co(function * () {
   server.use(express.static('public'));
   server.use((req, res, next) => {
     req.db = db;
+    req.repos = repos;
     next();
   })
 
   server.get('*', (req, res) => {
-    return handle(req, res)
+    return handle(req, res);
   })
 
   const PORT = global.configuration.server.port;

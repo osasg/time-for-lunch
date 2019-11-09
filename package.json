@@ -24,6 +24,7 @@
     "apollo-boost": "^0.4.4",
     "apollo-datasource-rest": "^0.6.6",
     "apollo-server": "^2.9.7",
+    "bcrypt": "^3.0.6",
     "classnames": "^2.2.6",
     "co": "^4.6.0",
     "graphql": "^14.5.8",
