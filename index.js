@@ -44,7 +44,13 @@ co(function * () {
 
   const apolloServer = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
+    context: ({ req }) => {
+      return {
+        db: db,
+        repos: repos
+      }
+    }
   });
 
   apolloServer.applyMiddleware({ app });

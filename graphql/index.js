@@ -1,27 +1,10 @@
-const typeDefs = `
-  type Query {
-    todayMeals: [Meal]
-  }
+const glue = require('schemaglue');
 
-  type Meal {
-    name: String
-    imageUrl: String
-  }
-`;
-
-const resolvers = {
-  Query: {
-    todayMeals: (root, params) => {
-      try {
-        return [ {} ];
-      } catch (e) {
-        console.error(e.stack);
-      }
-    }
-  }
-}
+const { schema, resolver } = glue('graphql', {
+  js: '**/*.js'
+});
 
 module.exports = {
-  typeDefs,
-  resolvers
+  typeDefs: schema,
+  resolvers: resolver
 }

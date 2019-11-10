@@ -1,0 +1,9 @@
+type Query {
+  users: [Account]
+}
+
+type Account {
+  email: String
+  password: String
+  fullname: String
+}

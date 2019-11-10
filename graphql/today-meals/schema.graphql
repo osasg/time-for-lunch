@@ -1,0 +1,8 @@
+type Query {
+  todayMeals: [Meal]
+}
+
+type Meal {
+  name: String
+  imageUrl: String
+}
