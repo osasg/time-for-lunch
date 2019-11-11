@@ -4,6 +4,22 @@ body {
   color: $normalTextColor;
 }
 
+.form {
+  &__input-group {
+    padding-top: 12px;
+    display: block;
+  }
+
+  &__input {
+    font-family: Roboto;
+  }
+
+  p {
+    margin: 0;
+    margin-bottom: 4px;
+  }
+}
+
 .lunch-title a {
   height: 39px;
   color: $primaryColor;
@@ -36,79 +52,89 @@ body {
   width: 50%;
 }
 
-
 .form-login {
   &-wrapper {
-    margin-top: 180px;
+    margin-top: 120px;
     margin-left: 146px;
   }
 
-  &-login {
-    width: 398px;
-  }
+  .form {
+    &-login {
+      width: 398px;
+    }
 
-  &__input-group {
-    margin-top: 56px;
-    width: 400px;
-    display: flex;
-    flex-wrap: wrap;
-  }
+    &__input-group {
+      margin-top: 56px;
+      width: 400px;
+      display: flex;
+      flex-wrap: wrap;
+    }
 
-  &__icon-wrapper {
-    width: 36px;
-    height: 36px;
-    border: 6px solid $primaryColor;
-    border-bottom-right: 0px solid $primaryColor;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    &__icon-wrapper {
+      width: 36px;
+      height: 36px;
+      border: 6px solid $primaryColor;
+      border-bottom-right: 0px solid $primaryColor;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  &__input-wrapper {
-    display: inline-block;
-    position: relative;
-    width: 296px;
-    height: 42px;
-    border-bottom: 6px solid $primaryColor;
-    transform: translateX(-24px);
-  }
+    &__input-wrapper {
+      display: inline-block;
+      position: relative;
+      width: 296px;
+      height: 42px;
+      border-bottom: 6px solid $primaryColor;
+      transform: translateX(-24px);
+    }
 
-  &__input {
-    position: absolute;
-    top: 11px;
-    left: 40px;
-    height: 21px;
-    color: $normalTextColor;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-size: 18px;
-    font-weight: 400;
-  }
+    &__input {
+      position: absolute;
+      top: 7px;
+      left: 36px;
+      padding: 4px;
+      width: 250px;
+      color: $normalTextColor;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      font-weight: 400;
+      font-weight: bold;
+    }
 
-  &__label-txt {
-    position: absolute;
-    top: 13px;
-    left: 40px;
-    height: 21px;
-    color: $formInputColor;
-    font-size: 18px;
-    text-transform: uppercase;
-  }
+    &__label-txt {
+      position: absolute;
+      top: 13px;
+      left: 40px;
+      height: 21px;
+      color: $formInputColor;
+      font-size: 18px;
+      text-transform: uppercase;
+    }
 
-  &__label-txt--hidden {
-    display: none;
-  }
+    &__forget-pwd {
+      margin-left: 64px;
+      margin-top: 8px;
+      text-decoration: none;
+      width: 182px;
+      height: 21px;
+      color: $normalTextColor;
+      cursor: pointer;
+    }
 
-  &__forget-pwd {
-    margin-left: 64px;
-    margin-top: 8px;
-    text-decoration: none;
-    width: 182px;
-    height: 21px;
-    color: $normalTextColor;
-    cursor: pointer;
+    &__error-msg {
+      position: absolute;
+      top: -12px;
+      left: 40px;
+      // background-color: red;
+      color: red;
+      // padding: 8px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
   }
 }
 
@@ -908,18 +934,6 @@ body {
       height: 1px;
       border-bottom: 1px solid $normalTextColor;
     }
-  }
-}
-
-.form {
-  &__input-group {
-    padding-top: 12px;
-    display: block;
-  }
-
-  p {
-    margin: 0;
-    margin-bottom: 4px;
   }
 }
 

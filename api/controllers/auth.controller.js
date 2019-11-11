@@ -11,16 +11,6 @@ const postSignIn = async (req, res, next) => {
   const { Account } = req.repos;
   const { username, password } = req.body;
 
-  const { err0, value } = loginValidator.validate({ username, password });
-  if (err0)
-    return res.status(status.OK)
-      .send({
-        success: false,
-        message: 'ValidationError',
-        err0,
-        token: null
-      });
-
   try {
     const account = await Account.findByUsername({ username });
 
@@ -30,7 +20,7 @@ const postSignIn = async (req, res, next) => {
           success: false,
           message: 'Login failed',
           error: {
-            message: 'Account doesn\'t exist!'
+            username: 'Account doesn\'t exist!'
           },
           token: null
         });
@@ -43,7 +33,7 @@ const postSignIn = async (req, res, next) => {
           success: false,
           message: 'Login failed',
           error: {
-            message: 'password incorrect'
+            password: 'Password incorrect'
           },
           token: null
         });
@@ -62,8 +52,9 @@ const postSignIn = async (req, res, next) => {
 
 const postSignUp = async (req, res, next) => {
   const { Account } = req.repos;
-  const [ err, account ] = await to(Account.create(req.body));
-  if (err) return next(err);
+  const { username, password } = req.body;
+  const [ err1, account ] = await to(Account.create({ username, password }));
+  if (err1) return next(err1);
 
   res.status(200).send({
     success: true,

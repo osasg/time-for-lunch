@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+const { loginBodyValidator } = require('../../validators/');
 const controller = require('../controllers/auth.controller');
 
-router.post('/signin', controller.postSignIn);
+router.post('/signin', loginBodyValidator, controller.postSignIn);
 
-router.post('/signup', controller.postSignUp);
+router.post('/signup', loginBodyValidator, controller.postSignUp);
 
 module.exports = router;

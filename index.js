@@ -55,6 +55,17 @@ co(function * () {
 
   apolloServer.applyMiddleware({ app });
 
+  app.use((err, req, res, next) => {
+    if (err && err.error && err.error.isJoi) {
+      res.status(200).send({
+        message: 'ValidationError',
+        type: err.type,
+        error: err.error,
+        fields: err.error.details.map(d => d.context.label)
+      });
+    }
+  });
+
   app.get('*', (req, res) => {
     return handle(req, res);
   })
