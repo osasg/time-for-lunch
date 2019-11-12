@@ -30,7 +30,7 @@ class Profile extends React.Component {
       <div className="profile">
         <TopNav />
         <form className="form f-avatar">
-          <img className="f-avatar__image" src={avatarUrl} />
+          <img className="f-avatar__image" src={avatarUrl ? avatarUrl : '/icons/avatar.svg'} />
           <button type="submit" className="btn btn--update">Update avatar</button>
         </form>
         <form className="form f-profile">

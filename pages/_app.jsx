@@ -1,7 +1,7 @@
 import React from 'react';
 import App from 'next/app';
-import { Provider } from 'mobx-react';
-import { observable, extendObservable } from 'mobx';
+import { Provider, observer } from 'mobx-react';
+import { observable, extendObservable, runInAction } from 'mobx';
 import ApolloClient from 'apollo-client';
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import fetch from 'node-fetch';
@@ -18,12 +18,14 @@ class CurrentUser {
     extendObservable(this, {
       fullname: '',
       email: '',
+      username: '',
       avatarUrl: ''
     });
   }
 }
 
-const currentUser = observable(new CurrentUser());
+const currentUser = new CurrentUser();
+
 const client = new ApolloClient({
   link: createHttpLink({
     uri: 'localhost:3000/graphql',
@@ -32,9 +34,19 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-class MyApp extends App {
+@observer class MyApp extends App {
   componentDidCatch(error, info) {
-    console.log(error, info)
+    console.log(error, info);
+  }
+
+  componentDidMount() {
+    const { username, fullname, email, avatarUrl } = this.props.user;
+    currentUser.username = username;
+    currentUser.fullname = fullname;
+    currentUser.email = email;
+    currentUser.avatarUrl = avatarUrl;
+
+    return null;
   }
 
   render() {
@@ -54,29 +66,24 @@ class MyApp extends App {
       return {};
 
     let user = req.user;
+
     try {
       if (!user) {
-        let token = req.headers['x-access-token'] || req.headers['authorization'];
+        let token = req.cookies.token;
 
         if (!token)
           throw new Error('Token is require');
 
-        if (token.startsWith('Bearer '))
-          token = token.slice(7);
-
         const payload = jwt.verify(token, process.env.JWT_SECRET);
-        user = req.repos.Account.findById({ _id: payload._id});
+        user = await req.repos.Account.findById({ _id: payload._id});
         if (!user)
           return new Error('User is required');
       }
 
-      currentUser.username = user.username;
-      currentUser.fullname = user.fullname;
-      currentUser.avatarUrl = user.avatarUrl;
-      return {};
+      return { user };
 
     } catch (err) {
-      return {};
+      return { user: {} };
     }
   }
 }

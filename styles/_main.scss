@@ -12,6 +12,12 @@ body {
 
   &__input {
     font-family: Roboto;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #3d3d3d;
+    color: #3d3d3d;
+    font-size: 18px;
+    font-weight: 400;
   }
 
   p {

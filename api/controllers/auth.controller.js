@@ -21,8 +21,7 @@ const postSignIn = async (req, res, next) => {
           message: 'Login failed',
           error: {
             username: 'Account doesn\'t exist!'
-          },
-          token: null
+          }
         });
 
     const result = await bcrypt.compare(password, account.password);
@@ -34,16 +33,16 @@ const postSignIn = async (req, res, next) => {
           message: 'Login failed',
           error: {
             password: 'Password incorrect'
-          },
-          token: null
+          }
         });
+
+    res.cookie('token', generateJWT(account), { maxAge: process.env.COOKIE_EXP });
 
     res.status(status.OK)
       .send({
         success: true,
         message: 'Login successfully',
-        error: null,
-        token: generateJWT(account)
+        error: null
       });
   } catch (err) {
     next(err);
@@ -58,8 +57,7 @@ const postSignUp = async (req, res, next) => {
 
   res.status(200).send({
     success: true,
-    message: "Registered",
-    token: generateJWT(account)
+    message: "Registered"
   });
 }
 

@@ -5,6 +5,7 @@ const next = require('next');
 const { ApolloServer } = require('apollo-server-express');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 const config = require('./config/');
 const repositories = require('./repositories/');
@@ -35,6 +36,7 @@ co(function * () {
 
   const app = express();
 
+  app.use(cookieParser());
   app.use(helmet());
   app.use(morgan(morganFormat, { stream: logger.stream }));
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -57,6 +59,7 @@ co(function * () {
     typeDefs,
     resolvers,
     context: ({ req }) => {
+      const token = req.cookies.token;
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       const user = repos.Account.findByUsername({ username: payload.username });
 

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { to } = require('await-to-js');
 
 const requireAuth = async (req, res, next) => {
-  let token = req.headers['x-access-token'] || req.headers['authorization'];
+  let token = req.cookies.token;
 
   if (!token) {
     return res.status(status.UNAUTHORIZED).send({
@@ -10,9 +10,6 @@ const requireAuth = async (req, res, next) => {
       message: 'This site require authorization'
     });
   }
-
-  if (token.startsWith('Bearer '))
-    token = token.slice(7);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decodedPayload) => {
     if (err)
