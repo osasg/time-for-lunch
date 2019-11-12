@@ -1,0 +1,30 @@
+type Query {
+  lunch(token: String!): Lunch
+}
+
+type Lunch {
+  todayMeals: [Meal]
+  lunchStatus: LunchStatus
+  isConfirmed: Boolean
+  previousPicks: [Meal]
+}
+
+type Meal {
+  id: ID
+  name: String
+  imageUrl: String
+}
+
+type User {
+  _id: String
+  username: String
+  email: String
+  fullname: String
+}
+
+enum LunchStatus {
+  PREPARING,
+  ORDERING,
+  COOKING,
+  DELIVERING
+}
