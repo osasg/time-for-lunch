@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { observable, action, runInAction } from 'mobx';
+import { observable, action, runInAction, extendObservable } from 'mobx';
 import classnames from 'classnames';
 
 import TopNav from '../components/TopNav';
@@ -9,36 +9,69 @@ import SearchBox from '../components/SearchBox';
 
 import RemoveIcon from '../public/icons/remove.svg';
 
-@inject(['appState'])
+@inject(['currentUser'])
 @observer
 class Lunch extends React.Component {
-  @observable filteredMeals = [];
+  constructor(props) {
+    super(props);
+
+    extendObservable(this, {
+      todayMeals: [],
+      todayPick: null,
+      previousPicks: [],
+      isLocked: false,
+      lunchStatus: '',
+      isConfirm: false,
+      filteredMeals: []
+    });
+  }
+
+  @action pickMeal = m_id => {
+    if (this.isLocked)
+      return;
+
+    this.todayPick = m_id;
+    this.lunchStatus = 'LOCKED';
+    setTimeout(() => {
+      runInAction(() => this.lunchStatus = 'ORDERING');
+    }, 1200);
+  }
+
+  @action unPickMeal = () => {
+    this.todayPick = null;
+  }
+
+  @action confirm = () => {
+    this.isConfirmed = true;
+  }
 
   @action handleSearch = str => {
     const strToFilter = str.toLowerCase().split(/\s/).join('');
-    this.filteredMeals = this.props.appState.todayMeals.filter(m =>
+    this.filteredMeals = this.todayMeals.filter(m =>
       m.name.toLowerCase().split(/\s/).join('').includes(strToFilter));
   }
 
   componentDidMount() {
     runInAction(() => {
-      this.filteredMeals = this.props.appState.todayMeals;
+      this.filteredMeals = this.todayMeals;
     });
   }
 
   render() {
     const {
-      currentUser,
       todayPick, todayMeals, previousPicks,
       lunchStatus, isLocked, isConfirmed,
-      pickMeal, unPickMeal, confirm
-    } = this.props.appState;
+      pickMeal, unPickMeal, confirm,
+      filteredMeals,
+      handleSearch
+    } = this;
 
+    const { currentUser } = this.props;
     const pickedMeal = todayMeals.find(({ id }) => id === todayPick);
 
     const searchingArea = isLocked
       ? <div className="locked">You are being locked!</div>
-      : <SearchBox handleSearch={this.handleSearch}/>
+      : <SearchBox handleSearch={handleSearch}/>
       ;
 
     const todayPickArea = pickedMeal
@@ -106,12 +139,14 @@ class Lunch extends React.Component {
           <div className="previous-picks">
             <div className="picked__title">Previous</div>
             {previousPicks.map((p, i) =>
-              <img key={i} className="previous-picks__image" src={p.imageSrc} alt="Previous picked" />
+              <div className="previous-picks__image-wrapper">
+                <img key={i} className="previous-picks__image" src={p.imageSrc} alt="Previous picked" />
+              </div>
             )}
           </div>
         </div>
         <div className={classnames({ "todaymeals-list": true, "half-opacity": lunchStatus === 'LOCKED' })}>
-          {!isLocked && this.filteredMeals.map((meal, i) =>
+          {!isLocked && filteredMeals.map((meal, i) =>
             <MealView key={i} meal={meal} handleOnClick={() => pickMeal(meal.id)}/>
           )}
         </div>

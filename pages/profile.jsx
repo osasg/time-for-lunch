@@ -4,7 +4,7 @@ import { observable, extendObservable, action, runInAction } from 'mobx';
 
 import TopNav from '../components/TopNav';
 
-@inject(['appState'])
+@inject(['currentUser'])
 @observer
 class Profile extends React.Component {
   @observable profile = { name: '', email: '' };
@@ -24,7 +24,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    const { avatarUrl, fullname, email } = this.props.appState.currentUser;
+    const { avatarUrl, fullname, email } = this.props.currentUser;
 
     return (
       <div className="profile">

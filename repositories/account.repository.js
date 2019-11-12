@@ -14,18 +14,18 @@ module.exports = ({ db }) => {
     return collection.findOne({ _id: ObjectId(_id) });
   }
 
-  const create = async ({ email, password, fullname }) => {
+  const create = async ({ username, password, fullname }) => {
     const hashPassword = await bcrypt.hash(password, 10);
 
     const response = await collection.insertOne({
-      email, password: hashPassword, fullname, roles: [ "user" ]
+      username, password: hashPassword, fullname, roles: [ "user" ]
     });
 
     return response.ops[0];
   }
 
-  const update = async ({ _id, fullname }) => {
-    return collection.updateOne({ _id: ObjectId(_id) }, { $set: { fullname } });
+  const update = async ({ _id, fullname, email }) => {
+    return collection.updateOne({ _id: ObjectId(_id) }, { $set: { fullname, email } });
   }
 
   const remove = async ({ _id }) => {

@@ -78,7 +78,7 @@ class SignUpState {
     if (res.data.error)
       return;
 
-    Router.push('/lunch');
+    Router.push('/login');
   }
 }
 

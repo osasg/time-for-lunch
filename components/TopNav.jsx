@@ -4,9 +4,7 @@ import { inject, observer } from 'mobx-react';
 
 import AvatarIcon from '../public/icons/avatar.svg';
 
-export default inject(['appState'])(observer(({ appState }) => {
-  const { currentUser } = appState;
-
+export default inject(['currentUser'])(observer(({ currentUser }) => {
   return (
     <div className="top-nav">
       <div className="top-nav-wrapper">

@@ -481,14 +481,21 @@ body {
   }
 }
 
-.previous-picks__image {
-  color: transparent;
-  width: 244px;
-  height: 154px;
-  border: 1px solid #e1e1e1;
-  margin-bottom: 26px;
-  object-fit: cover;
-  background-color: $loadingColor;
+.previous-picks {
+  &__image-wrapper {
+    background-color: $loadingColor;
+    border: 1px solid #e1e1e1;
+    width: 244px;
+    height: 154px;
+    margin-bottom: 26px;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    color: transparent;
+    object-fit: cover;
+  }
 }
 
 .todaymeals-list {
