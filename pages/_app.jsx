@@ -14,63 +14,70 @@ import Router from 'next/router';
 import '../styles/styles.scss';
 
 class CurrentUser {
-  constructor({ fullname, email, avatarUrl }) {
+  constructor() {
     extendObservable(this, {
-      fullname: fullname,
-      email: email,
-      avatarUrl: avatarUrl
+      fullname: '',
+      email: '',
+      avatarUrl: ''
     });
   }
 }
 
+const currentUser = observable(new CurrentUser());
+const client = new ApolloClient({
+  link: createHttpLink({
+    uri: 'localhost:3000/graphql',
+    fetch
+  }),
+  cache: new InMemoryCache()
+});
+
 class MyApp extends App {
+  componentDidCatch(error, info) {
+    console.log(error, info)
+  }
+
   render() {
-    const {
-      Component, pageProps,
-      user: { fullname, email, avatarUrl },
-      link
-    } = this.props;
-
-    const client = new ApolloClient({
-      link,
-      cache: new InMemoryCache()
-    });
-
-    const currentUser = new CurrentUser({ fullname, email, avatarUrl });
+    const { Component, pageProps } = this.props;
 
     return (
-      <ApolloProvider client={client}>
-        <Provider currentUser={currentUser}>
+      <Provider currentUser={currentUser}>
+        <ApolloProvider client={client}>
           <Component {...pageProps} />
-        </Provider>
-      </ApolloProvider>
+        </ApolloProvider>
+      </Provider>
     );
   }
 
   static async getInitialProps({ ctx: { req, res } }) {
-    let user;
-    const link = createHttpLink({
-      uri: req && req.headers.host + '/graphql',
-      fetch
-    });
+    if (!req)
+      return {};
 
+    let user = req.user;
     try {
-      let token = req.headers['x-access-token'] || req.headers['authorization'];
+      if (!user) {
+        let token = req.headers['x-access-token'] || req.headers['authorization'];
 
-      if (!token)
-        throw new Error('Token is require');
+        if (!token)
+          throw new Error('Token is require');
 
-      if (token.startsWith('Bearer '))
-        token = token.slice(7);
+        if (token.startsWith('Bearer '))
+          token = token.slice(7);
 
-      const payload = jwt.verify(token, process.env.JWT_SECRET);
-      const user = req.user || req.repos.Account.findById({ _id: payload._id});
-      return { user, link };
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        user = req.repos.Account.findById({ _id: payload._id});
+        if (!user)
+          return new Error('User is required');
+      }
+
+      currentUser.username = user.username;
+      currentUser.fullname = user.fullname;
+      currentUser.avatarUrl = user.avatarUrl;
+      return {};
 
     } catch (err) {
-      return { user: {}, link };
+      return {};
     }
-
   }
 }
 

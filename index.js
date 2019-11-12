@@ -41,6 +41,8 @@ co(function * () {
   app.use(bodyParser.json());
   app.use(express.static('public'));
 
+  app.get(['/', '/home'], (req, res) => res.redirect('/login'));
+
   app.use((req, res, next) => {
     req.db = db;
     req.repos = repos;

@@ -155,4 +155,8 @@ class Lunch extends React.Component {
   }
 };
 
+Lunch.getInitialProps = async () => {
+  console.log('lunch')
+}
+
 export default Lunch;
