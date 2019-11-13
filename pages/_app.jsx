@@ -61,9 +61,15 @@ const client = new ApolloClient({
     );
   }
 
-  static async getInitialProps({ ctx: { req, res } }) {
+  static async getInitialProps({ Component, ctx }) {
+    const { req, res } = ctx;
+    let pageProps = {};
+
+    if (Component.getInitialProps)
+      pageProps = await Component.getInitialProps(ctx);
+
     if (!req)
-      return {};
+      return { pageProps };
 
     let user = req.user;
 
@@ -77,13 +83,13 @@ const client = new ApolloClient({
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         user = await req.repos.Account.findById({ _id: payload._id});
         if (!user)
-          return new Error('User is required');
+          throw new Error('User is required');
       }
 
-      return { user };
+      return { pageProps, user };
 
     } catch (err) {
-      return { user: {} };
+      return { pageProps, user: {} };
     }
   }
 }
