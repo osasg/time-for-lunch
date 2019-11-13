@@ -12,6 +12,7 @@ const repositories = require('./repositories/');
 const apiRoute = require('./api/routes/');
 const { resolvers, typeDefs } = require('./graphql/');
 const { requestMiddleware } = require('./middlewares/');
+const restrictRoute = require('./restrict.route');
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
@@ -43,8 +44,6 @@ co(function * () {
   app.use(bodyParser.json());
   app.use(express.static('public'));
 
-  app.get(['/', '/home'], (req, res) => res.redirect('/login'));
-
   app.use((req, res, next) => {
     req.db = db;
     req.repos = repos;
@@ -54,6 +53,8 @@ co(function * () {
 
   app.use(requestMiddleware.wirePreRequest);
   app.use('/api/', apiRoute);
+
+  restrictRoute(app);
 
   const apolloServer = new ApolloServer({
     typeDefs,

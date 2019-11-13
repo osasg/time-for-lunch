@@ -19,9 +19,23 @@ class CurrentUser {
       fullname: '',
       email: '',
       username: '',
-      avatarUrl: ''
+      avatarUrl: '',
+      roles: []
     });
   }
+
+  redirectToLoginPage = () => {
+    Router.push('/login');
+  }
+
+  isAuth = () =>
+    !!this.username
+
+  requireAuth = () =>
+    !!this.username || this.redirectToLoginPage()
+
+  hasRole = (role) =>
+    (this.requireAuth() && this.roles.includes(role)) || this.redirectToLoginPage()
 }
 
 const currentUser = new CurrentUser();
@@ -35,38 +49,11 @@ const client = new ApolloClient({
 });
 
 @observer class MyApp extends App {
-  componentDidCatch(error, info) {
-    console.log(error, info);
-  }
-
-  componentDidMount() {
-    const { username, fullname, email, avatarUrl } = this.props.user;
-    currentUser.username = username;
-    currentUser.fullname = fullname;
-    currentUser.email = email;
-    currentUser.avatarUrl = avatarUrl;
-
-    return null;
-  }
-
-  render() {
-    const { Component, pageProps } = this.props;
-
-    return (
-      <Provider currentUser={currentUser}>
-        <ApolloProvider client={client}>
-          <Component {...pageProps} />
-        </ApolloProvider>
-      </Provider>
-    );
-  }
-
   static async getInitialProps({ Component, ctx }) {
     const { req, res } = ctx;
-    let pageProps = {};
-
-    if (Component.getInitialProps)
-      pageProps = await Component.getInitialProps(ctx);
+    let pageProps = Component.getInitialProps
+      ? await Component.getInitialProps({ ...ctx, currentUser })
+      : {};
 
     if (!req)
       return { pageProps };
@@ -81,16 +68,50 @@ const client = new ApolloClient({
           throw new Error('Token is require');
 
         const payload = jwt.verify(token, process.env.JWT_SECRET);
-        user = await req.repos.Account.findById({ _id: payload._id});
+        user = await req.repos.Account.findById({ _id: payload._id });
         if (!user)
           throw new Error('User is required');
       }
 
-      return { pageProps, user };
+      return { pageProps, user: {
+        username: user.username,
+        fullname: user.fullname,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        roles: user.roles
+      }};
 
     } catch (err) {
+      res.clearCookie('token');
       return { pageProps, user: {} };
     }
+  }
+
+  componentDidCatch(error, info) {
+    console.log(error, info);
+  }
+
+  componentWillMount() {
+    const { username, fullname, email, avatarUrl, roles } = this.props.user;
+    currentUser.username = username;
+    currentUser.fullname = fullname;
+    currentUser.email = email;
+    currentUser.avatarUrl = avatarUrl;
+    currentUser.roles = roles;
+
+    return null;
+  }
+
+  render() {
+    const { Component, pageProps } = this.props;
+
+    return (
+      <Provider currentUser={currentUser}>
+        <ApolloProvider client={client}>
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </Provider>
+    );
   }
 }
 

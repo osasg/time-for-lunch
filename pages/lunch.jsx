@@ -12,6 +12,11 @@ import RemoveIcon from '../public/icons/remove.svg';
 @inject(['currentUser'])
 @observer
 class Lunch extends React.Component {
+  static async getInitialProps({ currentUser }) {
+    currentUser.isAuth();
+    return {};
+  }
+
   constructor(props) {
     super(props);
 
@@ -51,7 +56,7 @@ class Lunch extends React.Component {
       m.name.toLowerCase().split(/\s/).join('').includes(strToFilter));
   }
 
-  componentDidMount() {
+  componentWillMount() {
     runInAction(() => {
       this.filteredMeals = this.todayMeals;
     });
@@ -154,9 +159,5 @@ class Lunch extends React.Component {
     );
   }
 };
-
-Lunch.getInitialProps = async () => {
-  console.log('lunch')
-}
 
 export default Lunch;

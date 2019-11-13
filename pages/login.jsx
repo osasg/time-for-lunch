@@ -69,7 +69,7 @@ class LoginState {
       }
       return;
     }
-
+    global.Router = Router;
     Router.push('/lunch');
   }
 }
@@ -123,5 +123,21 @@ const Login = observer(() => {
     </div>
   );
 });
+
+Login.getInitialProps = async ({ req, res, currentUser }) => {
+  if (req) {
+    if (req.cookies.token){
+      res.writeHead(302, {
+        location: '/lunch'
+      });
+      res.end();
+    }
+  } else {
+    if (currentUser.isAuth())
+      Router.push('/lunch');
+  }
+
+  return {};
+}
 
 export default withFormBackground(Login);

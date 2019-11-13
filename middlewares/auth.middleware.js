@@ -1,38 +1,38 @@
 const jwt = require('jsonwebtoken');
 const { to } = require('await-to-js');
+const status = require('http-status');
 
 const requireAuth = async (req, res, next) => {
   let token = req.cookies.token;
 
   if (!token) {
-    return res.status(status.UNAUTHORIZED).send({
-      success: false,
-      message: 'This site require authorization'
-    });
+    return res.redirect('/login');
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decodedPayload) => {
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decodedPayload) => {
     if (err)
-      return res.status(status.UNAUTHORIZED).send({
-        success: false,
-        message: 'Token invalid',
-      });
+      return res.redirect('/login');
 
-    req.user = decodedPayload;
+    req.user = await req.repos.Account.findById({ _id: decodedPayload._id });
     next();
   });
 };
 
 const requireRole = roles => async (req, res, next) => {
-  const [ err, accountRoles ] = await to(Account.findRolesById({ _id: req.user._id }));
-  if (err) return next(err);
+  let accountRoles;
+  if (!req.user) {
+    [ err, accountRoles ] = await to(Account.findRolesById({ _id: req.user._id }));
+    if (err) return next(err);
+  } else {
+    accountRoles = req.user.roles;
+  }
 
   if (roles.some(role => accountRoles.includes(role)))
     return next();
 
   res.status(status.FORBIDDEN).send({
     success: false,
-    message: 'Do not have permission to access this resource',
+    message: 'You do not have permission to access this resource'
   });
 };
 
