@@ -8,6 +8,7 @@ import MealView from '../../../components/MealView';
 import DashboardNav from '../../../components/DashboardNav';
 import DashboardLayout from '../../../components/DashboardLayout';
 
+import AddResourceIcon from '../../../public/icons/add-resource.svg';
 import data from '../../../data-sample.json';
 
 @observer class AdminMeals extends React.Component {
@@ -29,11 +30,17 @@ import data from '../../../data-sample.json';
 
   render() {
     const { searchStr, filteredMeals, handleFilterMeals } = this;
+    const newMeal = (
+      <Link href="/admin/meals/new"><a className="new-btn">
+        <AddResourceIcon />
+      </a></Link>
+    );
+
     return (
       <DashboardLayout>
         <div className="admin-meals">
           <DashboardNav currentBoard="Meals" />
-          <AdminHead headName="Meals" handleFilterResources={handleFilterMeals} searchStr={searchStr} />
+          <AdminHead newResourceBtn={newMeal} headName="Meals" handleFilterResources={handleFilterMeals} searchStr={searchStr} />
           <div className="meals-list resources-list">
             {filteredMeals.map((meal, i) =>
               <Link key={i} href={`/admin/meals/${meal.id}`}>

@@ -289,7 +289,6 @@ body {
   }
 }
 
-
 .lunch {
   margin: auto;
   margin-top: 110px;
@@ -704,6 +703,9 @@ body {
     margin: 0;
     font-size: 48px;
     font-weight: 500;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
   }
 
   .search-txt {
@@ -719,6 +721,10 @@ body {
       display: block;
       width: 220px;
     }
+  }
+
+  .new-btn {
+    margin-left: 16px;
   }
 
   .search-btn {

@@ -31,10 +31,13 @@ import SearchIcon from '../public/icons/search.svg';
   }
 
   render() {
-    const { headName, searchStr, searchable = true } = this.props;
+    const { headName, searchStr, searchable = true, newResourceBtn } = this.props;
     return (
       <div className="admin-head">
-        <h1 className="admin-title">{headName}</h1>
+        <h1 className="admin-title">
+          {headName}
+          {newResourceBtn}
+        </h1>
         {
           searchable
           && <>
@@ -52,7 +55,8 @@ import SearchIcon from '../public/icons/search.svg';
 AdminHead.propTypes = {
   headName: PropTypes.string.isRequired,
   searchStr: PropTypes.string,
-  handleFilterResources: PropTypes.func
+  handleFilterResources: PropTypes.func,
+  newResourceBtn: PropTypes.element
 }
 
 export default AdminHead;

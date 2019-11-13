@@ -13,15 +13,10 @@ import RemoveIcon from '../../../public/icons/remove.svg';
 import data from '../../../data-sample.json';
 
 @observer
-class AdminMealDetails extends React.Component {
+class AdminNewMeal extends React.Component {
   @observable meal = {
-    name: '',
     imageSrc: ''
   };
-
-  componentDidMount() {
-    this.meal = this.props.meal;
-  }
 
   @action uploadImage = e => {
     const file = e.currentTarget.files[0];
@@ -30,10 +25,6 @@ class AdminMealDetails extends React.Component {
       return;
 
     this.meal.imageSrc = URL.createObjectURL(file);
-  }
-
-  requestRemoveMeal = () => {
-
   }
 
   requestSaveMeal = e => {
@@ -49,11 +40,6 @@ class AdminMealDetails extends React.Component {
         <div className="meal-detail">
           <AdminHead headName={meal.name ? meal.name : 'New meal'} />
             <form className="form meal-form" onSubmit={requestSaveMeal}>
-              <div className="meal-form__remove">
-                <button className="btn btn--remove" onClick={requestRemoveMeal}>
-                  <RemoveIcon /><span>Remove</span>
-                </button>
-              </div>
               <MealFormBody
                 meal={meal}
                 uploadImage={uploadImage}
@@ -66,10 +52,4 @@ class AdminMealDetails extends React.Component {
   }
 }
 
-AdminMealDetails.getInitialProps = async context => {
-  const { id } = context.query;
-
-  return { meal: data.todayMeals.find(m => m.id === parseInt(id)) };
-}
-
-export default AdminMealDetails;
+export default AdminNewMeal;
