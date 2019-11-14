@@ -19,9 +19,7 @@ module.exports = ({ db }) => {
   }
 
   const create = async ({ meal_ids }) => {
-    const meals = {};
-
-    meal_ids.forEach(id => meals[id] = []);
+    const meals = meal_ids.map(id => ({ meal_id, pickers: [] }));
 
     const response = await collection.insertOne({
       meals
@@ -30,23 +28,36 @@ module.exports = ({ db }) => {
     return response.ops[0];
   }
 
-  const update = async ({ _id, meals }) => {
-    const updateMeal = {};
-    meals.forEach(m => updateMeal[m._id] = m.account_ids);
+  const update = async ({ _id, meal_ids }) => {
+    const meals = meal_ids.map(id => ({ meal_id, pickers: [] }));
 
-    const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { meals: updateMeal } });
+    const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { meals } });
     return result.ops[0];
   }
 
   const updateWithAccount = async ({ _id, account_id, meal_id }) => {
     const todayLunch = await findById({ _id });
-    for (let m_id in todayLunch.meals) {
-      todayLunch.meals[m_id].filter(account_id);
+
+    if (todayLunch.lunchStatus !== 'ORDERING')
+      return null;
+
+    for (let m in todayLunch.meals) {
+      m.pickers = m.pickers.filter(p => p.account_id === account_id);
     }
 
-    todayLunch.meals[meal_id].push(account_id);
+    if (meal_id) {
+      todayLunch.meals.find(m => m.id === meal_id)
+        .pickers
+        .push({ account_id, isConfirmed: false });
+    }
 
     const result = await collection.updateOne({ _id: ObjectId(_Id) }, { $set: { meals: todayLunch.meals } });
+    return result.ops[0];
+  }
+
+  const updateLunchStatus = async ({ _id, lunchStatus }) => {
+    const result = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { lunchStatus } });
+
     return result.ops[0];
   }
 
@@ -64,6 +75,8 @@ module.exports = ({ db }) => {
     findById,
     create,
     update,
+    updateWithAccount,
+    updateLunchStatus,
     remove,
     removeMany
   }

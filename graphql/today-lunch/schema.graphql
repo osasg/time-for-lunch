@@ -4,6 +4,7 @@ type Query {
 
 type Mutation {
   createTodayLunch(meal_ids: [ID!]!): TodayLunch
-  updateTodayLunch(meals: TodayLunch!): TodayLunch
-  pickTodayLunch(account_id: ID!, meal_id: ID!, _id: ID!): TodayLunch
+  updateTodayLunch(_id: ID!, meal_ids: [ID!]!): TodayLunch
+  pickTodayLunch(account_id: ID!, meal_id: ID, _id: ID!): TodayLunch
+  updateLunchStatus(_id: ID!, lunchStatus: Boolean!): Boolean
 }

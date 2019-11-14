@@ -20,7 +20,12 @@ type LunchMeal implements Meal {
   _id: ID
   name: String
   imageUrl: String
-  picker: [ID]
+  pickers: [PickerConfirm]
+}
+
+type PickerConfirm {
+  account_id: ID
+  isConfirmed: Boolean
 }
 
 interface Meal {
