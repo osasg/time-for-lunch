@@ -2,9 +2,11 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
   lunch: async (root, { token }, { repos, user }) => {
+    const [ err, todayLunch ] = await to(repos.TodayLunch.findLunchForToday());
+
     return {
-      todayMeals: [],
-      lunchStatus: '',
+      todayLunch,
+      lunchStatus: todayLunch.status,
       isConfirmed: false,
       previousPicks: []
     }

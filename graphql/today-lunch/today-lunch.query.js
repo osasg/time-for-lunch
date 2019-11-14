@@ -1,7 +1,7 @@
 const to = require('await-to-js');
 
 module.exports = {
-  todayMeals: (root, params, { repos }) => {
+  todayLunch: (root, params, { repos }) => {
     try {
       return [ {} ];
     } catch (e) {

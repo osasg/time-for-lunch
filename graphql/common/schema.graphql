@@ -3,14 +3,28 @@ type Query {
 }
 
 type Lunch {
-  todayMeals: [Meal]
+  todayLunch: [TodayLunch]
   lunchStatus: LunchStatus
   isConfirmed: Boolean
   previousPicks: [Meal]
 }
 
-type Meal {
-  id: ID
+type TodayLunch {
+  _id: ID
+  status: LunchStatus
+  created_at: String
+  meals: [LunchMeal]
+}
+
+type LunchMeal implements Meal {
+  _id: ID
+  name: String
+  imageUrl: String
+  picker: [ID]
+}
+
+interface Meal {
+  _id: ID
   name: String
   imageUrl: String
 }
@@ -20,6 +34,12 @@ type User {
   username: String
   email: String
   fullname: String
+}
+
+input SearchInput {
+  pattern: String!
+  page: Int
+  perPage: Int
 }
 
 enum LunchStatus {

@@ -1,0 +1,10 @@
+type Query {
+  meals(search: SearchInput!): [Meal]
+  findMealById(_id: String!): Meal
+}
+
+type Mutation {
+  createMeal(name: String!, imageUrl: String!): Meal
+  updateMeal(name: String!, imageUrl: String!): Meal
+  removeMeal(_id: ID!): Boolean
+}

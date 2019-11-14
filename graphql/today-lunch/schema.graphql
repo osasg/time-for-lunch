@@ -1,0 +1,9 @@
+type Query {
+  todayLunch: [TodayLunch]
+}
+
+type Mutation {
+  createTodayLunch(meal_ids: [ID!]!): TodayLunch
+  updateTodayLunch(meals: TodayLunch!): TodayLunch
+  pickTodayLunch(account_id: ID!, meal_id: ID!, _id: ID!): TodayLunch
+}

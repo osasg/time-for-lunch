@@ -1,4 +1,5 @@
-const Query = require('./users.query');
+const Query = require('./user.query');
+const Mutation = require('./user.mutation');
 
 module.exports = {
   resolver: {

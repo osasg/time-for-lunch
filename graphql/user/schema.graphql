@@ -1,3 +1,8 @@
 type Query {
-  users: [User]
+  users(search: SearchInput!): [User]
+}
+
+type Mutation {
+  block(_id: ID, is: Boolean!): Boolean
+  remove(_id: ID): Boolean
 }
