@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 const config = require('./config/');
 const repositories = require('./repositories/');
 const apiRoute = require('./api/routes/');
-const { resolvers, typeDefs } = require('./graphql/');
+const { resolvers, typeDefs, schemaDirectives } = require('./graphql/');
 const { requestMiddleware } = require('./middlewares/');
 const restrictRoute = require('./restrict.route');
 
@@ -60,12 +60,22 @@ co(function * () {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
-      // const token = req.cookies.token;
-      // const payload = jwt.verify(token, process.env.JWT_SECRET);
-      // const user = repos.Account.findByUsername({ username: payload.username });
+    schemaDirectives,
+    context: async ({ req }) => {
+      let user = null;
+      try {
+        const token = req.headers.authorization;
 
-      return { db: db, repos: repos, user: {}, logger };
+        if (token) {
+          const { _id } = jwt.verify(token, process.env.JWT_SECRET);
+          user = await repos.Account.findById({ _id });
+        }
+      } catch (err) {
+        logger.error('An error occupied when decoding jwt token');
+        logger.error(err.stack);
+      } finally {
+        return { db, repos, user, logger };
+      }
     }
   });
 

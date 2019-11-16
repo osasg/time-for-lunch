@@ -1,5 +1,5 @@
 type Query {
-  users(search: SearchInput!): [User]
+  users(search: SearchInput!): [User] @requireAuth
 }
 
 type Mutation {
