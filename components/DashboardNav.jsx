@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import WhiteHomeIcon from '../public/icons/white-home.svg';
 import WhiteMealsIcon from '../public/icons/white-meals.svg';
 import WhiteUsersIcon from '../public/icons/white-users.svg';
-import WhiteTodayMealsIcon from '../public/icons/white-today-meals.svg';
+import WhiteTodayLunchIcon from '../public/icons/white-today-lunch.svg';
 import WhiteAnalystIcon from '../public/icons/white-analyst.svg';
 import WhiteDeliveryIcon from '../public/icons/white-delivery.svg';
 
 import HomeIcon from '../public/icons/home.svg';
 import MealsIcon from '../public/icons/meals.svg';
 import UsersIcon from '../public/icons/users.svg';
-import TodayMealsIcon from '../public/icons/today-meals.svg';
+import TodayLunchIcon from '../public/icons/today-lunch.svg';
 import AnalystIcon from '../public/icons/analyst.svg';
 import DeliveryIcon from '../public/icons/delivery.svg';
 
@@ -20,13 +20,13 @@ const icons = {
   WhiteHomeIcon,
   WhiteMealsIcon,
   WhiteUsersIcon,
-  WhiteTodayMealsIcon,
+  WhiteTodayLunchIcon,
   WhiteAnalystIcon,
   WhiteDeliveryIcon,
   HomeIcon,
   MealsIcon,
   UsersIcon,
-  TodayMealsIcon,
+  TodayLunchIcon,
   AnalystIcon,
   DeliveryIcon
 };
@@ -34,7 +34,7 @@ const icons = {
 const Control = ({ currentBoard }) => {
   return (
     <div className="control">
-      {['Home', 'Meals', 'Users', 'TodayMeals', 'Analyst','Delivery'].map((v, i) => {
+      {['Home', 'Meals', 'Users', 'TodayLunch', 'Analyst','Delivery'].map((v, i) => {
         const BoardIcon = icons[(currentBoard === v ? '' : 'White') + v + 'Icon'];
 
         return (
@@ -71,7 +71,7 @@ const DashboardNav = ({ currentBoard }) => {
 }
 
 DashboardNav.propTypes = {
-  currentBoard: PropTypes.oneOf(['Home', 'Meals', 'Users', 'TodayMeals', 'Analyst','Delivery']).isRequired
+  currentBoard: PropTypes.oneOf(['Home', 'Meals', 'Users', 'TodayLunch', 'Analyst','Delivery']).isRequired
 }
 
 export default DashboardNav;

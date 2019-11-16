@@ -1,7 +1,9 @@
-const to = require('await-to-js');
+const { to } = require('await-to-js');
 
 module.exports = {
   users: async (root, { search }, { repos }) => {
-    return repos.Account.search(search);
+    const [ err, accounts ] = await to(repos.Account.search(search));
+
+    return accounts;
   }
 }

@@ -8,21 +8,30 @@ module.exports = ({ db }) => {
   }
 
   const create = async ({ name, imageUrl }) => {
-    collection.insertOne({ name, imageUrl });
+    const response = await collection.insertOne({ name, imageUrl });
+    return response.ops[0];
   }
 
   const update = async ({ _id, name, imageUrl }) => {
-    collection.updateOne({ _id: ObjectId(id) }, { $set: {
+    const response = await collection.updateOne({ _id: ObjectId(id) }, { $set: {
       name, imageUrl
     }});
+
+    return response.ops[0];
   }
 
   const remove = async ({ _id }) => {
-    collection.deleteOne({ _id: Object(id) });
+    const response = await collection.deleteOne({ _id: ObjectId(_id) });
+    return response.result.ok;
   }
 
   const search = async ({ pattern, page = 0, perPage = 10 }) => {
-    const cursor = collection.find({ $text: { $search: pattern } })
+    pattern = pattern
+      ? pattern.split(/[\s]/).map(w => `(${w})`).join('|')
+      : '';
+    pattern = new RegExp(pattern, 'i');
+
+    const cursor = collection.find({ name: { $regex: pattern } })
       .skip(page * perPage)
       .limit(perPage);
 

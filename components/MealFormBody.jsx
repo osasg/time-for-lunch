@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { runInAction } from 'mobx';
 import Router from 'next/router';
 
 export default observer(({ meal, uploadImage }) =>
@@ -14,7 +15,7 @@ export default observer(({ meal, uploadImage }) =>
     <div className="meal-form__info">
       <label className="form__input-group" htmlFor="form__meal-name">
         <p>Name</p>
-        <input type="text" name="meal[name]" id="form__meal-name" className="form__input" defaultValue={meal.name} />
+        <input onChange={e => meal.name = e.currentTarget.value} type="text" name="meal[name]" id="form__meal-name" className="form__input" defaultValue={meal.name} />
       </label>
       <div className="form__btn-group">
         <button type="submit" className="btn btn--update">Save</button>

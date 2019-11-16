@@ -64,7 +64,15 @@ module.exports = ({ db }) => {
   }
 
   const search = async ({ pattern, page = 0, perPage = 10 }) => {
-    const cursor = collection.find({ $text: { $search: pattern } })
+    pattern = pattern
+      ? pattern.split(/[\s]/).map(w => `(${w})`).join('|')
+      : '';
+    pattern = new RegExp(pattern, 'i');
+
+    const cursor = collection.find({ $or: [
+      { username: { $regex: pattern } },
+      { fullname: { $regex: pattern } }
+    ]})
       .skip(page * perPage)
       .limit(perPage);
 
@@ -84,6 +92,7 @@ module.exports = ({ db }) => {
     update,
     remove,
     removeMany,
-    findByUsername
+    findByUsername,
+    search
   }
 }

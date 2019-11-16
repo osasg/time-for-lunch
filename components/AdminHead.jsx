@@ -14,24 +14,51 @@ import SearchIcon from '../public/icons/search.svg';
     this.searchBtn = React.createRef();
   }
 
-  @action handleToggleSearch = e => {
-    if (e.currentTarget.classList.contains('open-search'))
-      return this.props.handleFilterResources(this.searchTxt.current.value);
+  @action handleOnKeyUp = e => {
+    if (e.keyCode === 13) {
+      this.props.parentState.isReadyToUpdate = true;
+      this.props.handleSearchResources();
+    } else {
+      this.props.parentState.searchStr = e.currentTarget.value;
+    }
+  }
 
+  handleToggleSearch = e => {
     e.currentTarget.classList.add('open-search');
     setTimeout(() =>
       this.searchTxt.current.classList.add('open-search')
-      || this.searchTxt.current.focus()
+        || this.searchTxt.current.focus()
     , 200);
   }
 
-  componentDidMount = () => {
-    if (this.searchTxt.current)
-      this.searchTxt.current.addEventListener("keyup", () => this.searchBtn.current.click());
+  handleWindowOnKeyUp = e => {
+    if (!this.searchBtn.current || this.searchBtn.current.classList.contains('open-search'))
+      return;
+
+    if (e.keyCode === 83) {
+      this.searchBtn.current.click();
+    }
+  }
+
+  componentDidMount() {
+    if(!this.props.searchable)
+      return;
+
+    this.props.parentState.searchStr
+      && this.searchTxt.current.focus();
+
+    window.addEventListener('keyup', this.handleWindowOnKeyUp);
+  }
+
+  componentWillUnmount() {
+    if(!this.props.searchable)
+      return;
+
+    window.removeEventListener('keyup', this.handleWindowOnKeyUp);
   }
 
   render() {
-    const { headName, searchStr, searchable = true, newResourceBtn } = this.props;
+    const { headName, parentState, searchable = true, newResourceBtn, parrentState } = this.props;
     return (
       <div className="admin-head">
         <h1 className="admin-title">
@@ -41,8 +68,18 @@ import SearchIcon from '../public/icons/search.svg';
         {
           searchable
           && <>
-            <input ref={this.searchTxt} className="search-txt" type="text" defaultValue={searchStr} />
-            <div ref={this.searchBtn} className="search-btn" onClick={this.handleToggleSearch}>
+            <input
+              onKeyUp={this.handleOnKeyUp}
+              ref={this.searchTxt}
+              className={classnames('search-txt', { 'open-search': !!parentState.searchStr })}
+              type="text"
+              defaultValue={parentState.searchStr}
+            />
+            <div
+              ref={this.searchBtn}
+              className={classnames('search-btn', { 'open-search': !!parentState.searchStr })}
+              onClick={this.handleToggleSearch}
+            >
               <SearchIcon />
             </div>
           </>
@@ -53,10 +90,11 @@ import SearchIcon from '../public/icons/search.svg';
 };
 
 AdminHead.propTypes = {
-  headName: PropTypes.string.isRequired,
-  searchStr: PropTypes.string,
-  handleFilterResources: PropTypes.func,
-  newResourceBtn: PropTypes.element
+  searchable: PropTypes.bool,
+  parentState: PropTypes.object,
+  handleSearchResources: PropTypes.func,
+  newResourceBtn: PropTypes.element,
+  headName: PropTypes.string.isRequired
 }
 
 export default AdminHead;

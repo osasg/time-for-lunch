@@ -42,7 +42,7 @@ const currentUser = new CurrentUser();
 
 const client = new ApolloClient({
   link: createHttpLink({
-    uri: 'localhost:3000/graphql',
+    uri: 'http://localhost:3000/graphql',
     fetch
   }),
   cache: new InMemoryCache()

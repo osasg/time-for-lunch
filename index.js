@@ -6,6 +6,7 @@ const { ApolloServer } = require('apollo-server-express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
 
 const config = require('./config/');
 const repositories = require('./repositories/');
@@ -60,11 +61,11 @@ co(function * () {
     typeDefs,
     resolvers,
     context: ({ req }) => {
-      const token = req.cookies.token;
-      const payload = jwt.verify(token, process.env.JWT_SECRET);
-      const user = repos.Account.findByUsername({ username: payload.username });
+      // const token = req.cookies.token;
+      // const payload = jwt.verify(token, process.env.JWT_SECRET);
+      // const user = repos.Account.findByUsername({ username: payload.username });
 
-      return { db: db, repos: repos, user, logger };
+      return { db: db, repos: repos, user: {}, logger };
     }
   });
 

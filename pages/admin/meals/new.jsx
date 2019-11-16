@@ -2,6 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { observable, extendObservable, action, runInAction } from 'mobx';
 import Router from 'next/router';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
 
 import AdminHead from '../../../components/AdminHead';
 import DashboardNav from '../../../components/DashboardNav';
@@ -12,9 +14,9 @@ import RemoveIcon from '../../../public/icons/remove.svg';
 
 import data from '../../../data-sample.json';
 
-@observer
-class AdminNewMeal extends React.Component {
+class AdminNewMealState {
   @observable meal = {
+    name: '',
     imageSrc: ''
   };
 
@@ -27,29 +29,36 @@ class AdminNewMeal extends React.Component {
     this.meal.imageSrc = URL.createObjectURL(file);
   }
 
-  requestSaveMeal = e => {
+  requestSaveMeal = async (e, createMeal) => {
     e.preventDefault();
-  }
-
-  render() {
-    const { meal, uploadImage, requestRemoveMeal, requestSaveMeal } = this;
-
-    return (
-      <DashboardLayout>
-        <DashboardNav currentBoard="Meals" />
-        <div className="meal-detail">
-          <AdminHead headName={meal.name ? meal.name : 'New meal'} />
-            <form className="form meal-form" onSubmit={requestSaveMeal}>
-              <MealFormBody
-                meal={meal}
-                uploadImage={uploadImage}
-                requestSaveMeal={requestSaveMeal}
-              />
-            </form>
-        </div>
-      </DashboardLayout>
-    );
+    await createMeal();
+    Router.push('/admin/meals');
   }
 }
+
+const state = new AdminNewMealState();
+
+const AdminNewMeal = observer(() => {
+  const { meal, uploadImage, requestRemoveMeal, requestSaveMeal } = state;
+  const [ createMeal, { data, error } ] = useMutation(gql`
+    mutation CreateNewMeal {
+      createMeal(name: "${meal.name}", imageUrl: "${meal.imageSrc}") {
+        name, imageUrl
+      }
+    }
+  `);
+  console.log(data, error);
+  return (
+    <DashboardLayout>
+      <DashboardNav currentBoard="Meals" />
+      <div className="meal-detail">
+        <AdminHead searchable={false} headName={meal.name ? meal.name : 'New meal'} />
+          <form className="form meal-form" onSubmit={e => requestSaveMeal(e, createMeal)}>
+            <MealFormBody meal={meal} uploadImage={uploadImage} />
+          </form>
+      </div>
+    </DashboardLayout>
+  );
+})
 
 export default AdminNewMeal;

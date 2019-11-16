@@ -15,7 +15,11 @@ module.exports = ({ db }) => {
   }
 
   const findLunchForToday = async () => {
-    return collection.findOne({ }).sort({ created_at: 1 });
+    const today = new Date();
+    const hexSeconds = Math.floor(today/1000).toString(16);
+    const constructedObjectId = ObjectId(hexSeconds + "0000000000000000");
+
+    return collection.findOne({ _id: { $gt: constructedObjectId } });
   }
 
   const create = async ({ meal_ids }) => {

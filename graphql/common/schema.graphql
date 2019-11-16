@@ -16,7 +16,7 @@ type TodayLunch {
   meals: [LunchMeal]
 }
 
-type LunchMeal implements Meal {
+type LunchMeal {
   _id: ID
   name: String
   imageUrl: String
@@ -28,7 +28,7 @@ type PickerConfirm {
   isConfirmed: Boolean
 }
 
-interface Meal {
+type Meal {
   _id: ID
   name: String
   imageUrl: String
