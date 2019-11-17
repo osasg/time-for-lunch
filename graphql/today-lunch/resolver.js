@@ -3,6 +3,7 @@ const Mutation = require('./today-lunch.mutation');
 
 module.exports = {
   resolver: {
-    Query
+    Query,
+    Mutation
   }
 }

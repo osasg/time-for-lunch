@@ -9,7 +9,7 @@ class SearchBox extends React.Component {
   handleSearch = e => {
     const value = e.currentTarget.value;
     const label = e.currentTarget.parentElement.firstChild;
-    label.classList[value ? 'add' : 'remove']('form__label-txt--hidden');
+    label.classList[value ? 'add' : 'remove']('hidden');
 
     this.props.handleSearch(value);
   }

@@ -600,6 +600,7 @@ body {
 .admin-index {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 24px;
 }
 
 .board {
@@ -608,7 +609,6 @@ body {
   margin-right: 80px;
   margin-bottom: 80px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
-  border: 1px solid #eef;
   background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
@@ -846,7 +846,7 @@ body {
     flex: 1 1 0;
   }
 
-  .dms-search__list {
+  .dms-search__list-wrapper {
     width: 608px;
     max-height: 480px;
     position: absolute;
@@ -856,6 +856,11 @@ body {
     background-color: rgba(255,255,255, .9);
     border-radius: 24px;
     overflow-y: scroll;
+  }
+
+  .dms-search__list {
+    width: 100%;
+    height: 100%;
   }
 
   .dms-search__name {

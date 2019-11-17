@@ -7,6 +7,12 @@ const randomKey = length => Array.from({ length })
   .map(() => Math.floor(Math.random() * 10))
   .join('');
 
+const objectIdWithTimeStamp = (timeStamp) => {
+  const hexSeconds = Math.floor(timeStamp/1000).toString(16);
+  const constructedObjectId = ObjectId(hexSeconds + "0000000000000000");
+  return constructedObjectId;
+}
+
 module.exports = ({ db }) => {
   const collection = db.collection('todayLunches');
 
@@ -15,18 +21,19 @@ module.exports = ({ db }) => {
   }
 
   const findLunchForToday = async () => {
-    const today = new Date();
-    const hexSeconds = Math.floor(today/1000).toString(16);
-    const constructedObjectId = ObjectId(hexSeconds + "0000000000000000");
-
-    return collection.findOne({ _id: { $gt: constructedObjectId } });
+    return collection.findOne({ _id: { $gt: objectIdWithTimeStamp(new Date()) } });
   }
 
-  const create = async ({ meal_ids }) => {
-    const meals = meal_ids.map(id => ({ meal_id, pickers: [] }));
+  const create = async ({ meal_ids, date }) => {
+    const existing = await collection.findOne({ date });
+    if (existing)
+      return existing;
+
+    const meals = meal_ids.map(meal_id => ({ meal_id, pickers: [] }));
 
     const response = await collection.insertOne({
-      meals
+      meals,
+      date: date
     });
 
     return response.ops[0];
@@ -75,6 +82,26 @@ module.exports = ({ db }) => {
     return response.modifiedCount === _ids.length;
   }
 
+  const search = async ({ pattern = '', page = 0, perPage = 20 }) => {
+    const todayLunches = [];
+    let tl;
+    pattern = pattern.split("\s").map(p => parseInt(p));
+
+    if (pattern.some(p => typeof(p) !== 'number'))
+      return [];
+
+    const cursor  = (pattern.length === 3
+      ? collection.find({ _id: { $gt: objectIdWithTimeStamp(pattern.join('/')) } })
+      : collection.find({ date: { $regex: new RegExp(`${pattern.join('')}$`) } })
+    ).skip(page)
+      .limit(perPage);
+
+    while (tl = await cursor.next())
+      todayLunches.push(tl);
+
+    return todayLunches;
+  }
+
   return {
     findById,
     create,
@@ -82,6 +109,7 @@ module.exports = ({ db }) => {
     updateWithAccount,
     updateLunchStatus,
     remove,
-    removeMany
+    removeMany,
+    search
   }
 }
