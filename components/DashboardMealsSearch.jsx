@@ -48,9 +48,16 @@ import DMSList from './DMSList';
             <DMSList searchStr={searchStr} handleAddTodayMeal={handleAddTodayMeal}  />
           </div>
         </div>
-        <button className="btn btn--cancel" onClick={() => requestUpdateStatus(-1)}>Cancel</button>
+        {lunchStatus !== 'PREPARING' && lunchStatus !== 'DELIVERED' && <button className="btn btn--cancel" onClick={() => requestUpdateStatus(-1)}>Cancel</button>}
         <button className="btn btn__lunch-status" onClick={() => requestUpdateStatus(1)}>
-          {{ PREPARING: 'READY', PICKING: 'COOK', COOKING: 'DELIVERY', DELIVERING: 'DELIVERING' }[lunchStatus]}
+          {{
+            PREPARING: 'SAVE',
+            SUSPENDING: 'ORDER',
+            ORDERING: 'COOK',
+            COOKING: 'DELIVERY',
+            DELIVERING: 'DONE',
+            DELIVERED: '----'
+          }[lunchStatus]}
         </button>
       </div>
     );

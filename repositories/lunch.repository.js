@@ -16,15 +16,29 @@ const objectIdWithTimeStamp = (timeStamp) => {
 module.exports = ({ db }) => {
   const collection = db.collection('lunches');
 
+  const withMeals = async lunch => {
+    if (!lunch)
+      return null;
+
+    const meals = [];
+    for (let m of lunch.meals) {
+      const meal = await db.collection('meals').findOne({ _id: ObjectId(m.meal_id) });
+      meals.push({ ...m, ...meal });
+    }
+    return { ...lunch, meals };
+  }
+
   const findById = async ({ _id }) => {
-    return collection.findOne({ _id: ObjectId(_id) });
+    const lunch = await collection.findOne({ _id: ObjectId(_id) });
+    return withMeals(lunch);
   }
 
   const findLunchForToday = async () => {
     const now = new Date();
     const date = `${now.getFullYear()}/${now.getMonth()}/${now.getDate()}`;
 
-    return collection.findOne({ date });
+    const lunch = await collection.findOne({ date });
+    return withMeals(lunch);
   }
 
   const create = async ({ meal_ids, date }) => {
@@ -35,18 +49,20 @@ module.exports = ({ db }) => {
     const meals = meal_ids.map(meal_id => ({ meal_id, pickers: [] }));
 
     const response = await collection.insertOne({
-      meals,
-      date: date
+      meals, date, status: 'SUSPENDING'
     });
 
     return response.ops[0];
   }
 
-  const update = async ({ _id, meal_ids }) => {
-    const meals = meal_ids.map(id => ({ meal_id, pickers: [] }));
+  const update = async ({ _id, meal_ids, date }) => {
+    const meals = meal_ids.map(meal_id => ({ meal_id, pickers: [] }));
 
-    const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { meals } });
-    return result.ops[0];
+    await collection.updateOne({ _id: ObjectId(_id) }, { $set: {
+      meals, date, status: 'SUSPENDING'
+    } });
+
+    return findById({ _id });
   }
 
   const updateWithAccount = async ({ _id, account_id, meal_id }) => {
@@ -65,19 +81,19 @@ module.exports = ({ db }) => {
         .push({ account_id, isConfirmed: false });
     }
 
-    const result = await collection.updateOne({ _id: ObjectId(_Id) }, { $set: { meals: lunch.meals } });
-    return result.ops[0];
+    const response = await collection.updateOne({ _id: ObjectId(_Id) }, { $set: { meals: lunch.meals } });
+    return response.ops[0];
   }
 
   const updateLunchStatus = async ({ _id, status }) => {
-    const result = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { status } });
+    const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { status } });
 
-    return result.ops[0];
+    return response.result.nModified;
   }
 
   const remove = async ({ _id }) => {
     const response = await collection.deleteOne({ _id: ObjectId(_id) });
-    return result.result.ok;
+    return response.result.ok;
   }
 
   const removeMany = async ({ _ids }) => {
@@ -87,20 +103,23 @@ module.exports = ({ db }) => {
 
   const search = async ({ pattern = '', page = 0, perPage = 20 }) => {
     const lunches = [];
-    let tl;
-    pattern = pattern.split("\s").map(p => parseInt(p));
+    let lunch;
+    let cursor
+    if (!pattern) {
+      cursor = collection.find({});
+    } else {
+      pattern = pattern.split(/\s/).map(p => parseInt(p));
 
-    if (pattern.some(p => typeof(p) !== 'number'))
-      return [];
+      if (pattern.some(p => typeof(p) !== 'number'))
+        return [];
 
-    const cursor  = (pattern.length === 3
-      ? collection.find({ _id: { $gt: objectIdWithTimeStamp(pattern.join('/')) } })
-      : collection.find({ date: { $regex: new RegExp(`${pattern.join('')}$`) } })
-    ).skip(page)
-      .limit(perPage);
+      cursor  = collection.find({ date: { $regex: new RegExp(`${pattern.join('/')}$`) } })
+        .skip(page * perPage)
+        .limit(perPage);
+    }
 
-    while (tl = await cursor.next())
-      lunches.push(tl);
+    while (lunch = await cursor.next())
+      lunches.push(await withMeals(lunch));
 
     return lunches;
   }

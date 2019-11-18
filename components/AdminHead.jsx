@@ -90,7 +90,7 @@ import SearchIcon from '../public/icons/search.svg';
 };
 
 AdminHead.propTypes = {
-  searchable: PropTypes.bool,
+  searchable: PropTypes.bool.isRequired,
   parentState: PropTypes.object,
   handleSearchResources: PropTypes.func,
   newResourceBtn: PropTypes.element,

@@ -52,7 +52,7 @@ const Control = ({ currentBoard }) => {
 const DashboardNav = ({ currentBoard }) => {
   return (
     <div className="dashboard-nav">
-      <Link href="/lunch">
+      <Link href="/">
         <a>
           <div className="d-logo">
             <div className="d-logo__chars">

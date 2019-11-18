@@ -4,7 +4,7 @@ type Query {
 
 type Mutation {
   createLunch(meal_ids: [ID!]!, date: String!): Lunch
-  updateLunch(_id: ID!, meal_ids: [ID!]!): Lunch
+  updateLunch(_id: ID!, meal_ids: [ID!]!, date: String!): Lunch
   pickLunch(account_id: ID!, meal_id: ID, _id: ID!): Lunch
-  updateLunchStatus(_id: ID!, status: Boolean!): Boolean
+  updateLunchStatus(_id: ID!, status: String!): Boolean
 }

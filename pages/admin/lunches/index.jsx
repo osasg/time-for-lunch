@@ -5,6 +5,7 @@ import Link from 'next/link';
 import to from 'await-to-js';
 import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import classnames from 'classnames';
 
 import AdminHead from '../../../components/AdminHead';
 import DashboardNav from '../../../components/DashboardNav';
@@ -12,15 +13,15 @@ import DashboardLayout from '../../../components/DashboardLayout';
 
 import AddResourceIcon from '../../../public/icons/add-resource.svg';
 
-class AdminLunchState {
+class AdminLunchesState {
   @observable searchStr = '';
   @observable lunches = null;
   @observable isReadyToUpdate = false;
 }
 
-const state = new AdminLunchState();
+const state = new AdminLunchesState();
 
-const AdminLunch = observer((props) => {
+const AdminLunches = observer((props) => {
   runInAction(() => {
     if (props.lunches && !state.lunches)
       state.lunches =  props.lunches || [];
@@ -57,20 +58,28 @@ const AdminLunch = observer((props) => {
     searchLunches({ variables: { pattern: '' } });
   }
 
+  const now = new Date();
+  const date = `${now.getFullYear()}/${now.getMonth()}/${now.getDate()}`;
+
   return (
     <DashboardLayout>
       <div className="admin-lunches">
         <DashboardNav currentBoard="Lunches" />
         <AdminHead
+          searchable={true}
           newResourceBtn={newLunch}
           headName="Lunches"
-          handleSearchResources={() => searchLunches({ variables: { pattern: searchStr } })}
+          handleSearchResources={() => searchLunches({ variables: { pattern: state.searchStr } })}
           parentState={state}
         />
         <div className="lunches-list resources-list">
-          {state.lunches && state.lunches.map((lunches, i) =>
-            <Link key={i} href={`/admin/lunches/${lunches._id}`}>
-              <a></a>
+          {state.lunches && state.lunches.map(l =>
+            <Link key={l._id} href={`/admin/lunches/${l._id}`}>
+              <a>
+                <div className={classnames("lunch-view", { "lunch-view--today": date === l.date })}>
+                  {l.date}
+                </div>
+              </a>
             </Link>
           )}
         </div>
@@ -79,7 +88,7 @@ const AdminLunch = observer((props) => {
   );
 });
 
-AdminLunch.getInitialProps = async ({ req, res }) => {
+AdminLunches.getInitialProps = async ({ req, res }) => {
   if (req) {
     const [ err, lunches ] = await to(req.repos.Lunch.search({ pattern: '', page: 0, perPage: 20 })) || [];
     if (err)
@@ -90,4 +99,4 @@ AdminLunch.getInitialProps = async ({ req, res }) => {
   return {};
 }
 
-export default AdminLunch;
+export default AdminLunches;

@@ -53,7 +53,6 @@ const AdminUsers = observer((props) => {
   }
 
   if(!data && !state.users) {
-    console.log('query')
     state.isReadyToUpdate = true;
     searchUsers({ variables: { pattern: '' } });
   }
@@ -63,6 +62,7 @@ const AdminUsers = observer((props) => {
       <div className="admin-users">
         <DashboardNav currentBoard="Users" />
         <AdminHead
+          searchable={true}
           headName="Users"
           handleSearchResources={() => searchMeals({ variables: { pattern: searchStr } })}
           parentState={state}

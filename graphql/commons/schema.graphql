@@ -17,7 +17,7 @@ type Lunch {
 }
 
 type LunchMeal {
-  _id: ID
+  meal_id: ID
   name: String
   imageUrl: String
   pickers: [PickerConfirm]
@@ -52,5 +52,6 @@ enum LunchStatus {
   SUSPENDING,
   ORDERING,
   COOKING,
-  DELIVERING
+  DELIVERING,
+  DELIVERED
 }

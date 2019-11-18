@@ -61,6 +61,7 @@ const AdminMeals = observer((props) => {
       <div className="admin-meals">
         <DashboardNav currentBoard="Meals" />
         <AdminHead
+          searchable={true}
           newResourceBtn={newMeal}
           headName="Meals"
           handleSearchResources={() => searchMeals({ variables: { pattern: searchStr } })}

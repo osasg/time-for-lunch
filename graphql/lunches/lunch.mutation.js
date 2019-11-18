@@ -6,8 +6,8 @@ module.exports = {
 
     return lunch;
   },
-  updateLunch: async (root, { _id, meal_ids }, { repos }) => {
-    const [ err, lunch ] = await to(repos.Lunch.update({ _id, meal_ids }));
+  updateLunch: async (root, { _id, meal_ids, date }, { repos }) => {
+    const [ err, lunch ] = await to(repos.Lunch.update({ _id, meal_ids, date }));
 
     return lunch;
   },
@@ -16,9 +16,9 @@ module.exports = {
 
     return lunch;
   },
-  updateLunchStatus: async (root, { _id, lunchStatus }, { repos }) => {
-    const [ err, lunch ] = await to(repos.Lunch.updateLunchStatus({ _id, lunchStatus }));
+  updateLunchStatus: async (root, { _id, status }, { repos }) => {
+    const [ err, result ] = await to(repos.Lunch.updateLunchStatus({ _id, status }));
 
-    return lunch;
+    return result;
   }
 }
