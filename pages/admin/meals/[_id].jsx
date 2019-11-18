@@ -5,6 +5,7 @@ import Router from 'next/router';
 import to from 'await-to-js';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
+import axios from 'axios';
 
 import AdminHead from '../../../components/AdminHead';
 import DashboardNav from '../../../components/DashboardNav';
@@ -24,15 +25,29 @@ class AdminMealDetailsState {
     if (!file.type.includes('image/png'))
       return;
 
-    this.meal.imageSrc = URL.createObjectURL(file);
+    this.meal.image = file;
+    this.meal.imageUrl = URL.createObjectURL(file);
   }
 
   requestRemoveMeal = () => {
 
   }
 
-  requestSaveMeal = e => {
+  requestSaveMeal = async e => {
     e.preventDefault();
+    const { _id, name, image = {} } = this.meal;
+
+    const query = `
+      mutation UpdateMeal($name: String!, $image: Upload!) {
+        updateMeal(_id: "${_id}", name: $name, image: $image)
+      }
+    `
+    const [ err, res ] = await to(axios.post('/graphql', { query, variables: { name, image } }));
+
+    if (err)
+      return console.error(err);
+
+    Router.push('/admin/meals');
   }
 }
 

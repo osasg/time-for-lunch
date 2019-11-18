@@ -118,7 +118,7 @@ const numberStatuses = [
         {lunch.meals.map(m =>
           <div key={m._id} className="today-pick">
             <div className="today-pick__image-wrapper">
-              {m.imageSrc && <img className="today-pick__image" src={m.imageSrc} alt="Picked meal image" />}
+              {m.imageUrl && <img className="today-pick__image" src={m.imageUrl} alt="Picked meal image" />}
               <div className="today-pick__remove" onClick={() => removeTodayMeal(m._id)}><RemoveIcon /></div>
             </div>
             <div className="today-pick__name">{m.name}</div>

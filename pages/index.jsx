@@ -83,7 +83,7 @@ class Index extends React.Component {
       ? <div className="today-pick">
           <div className="picked__title">Today pick</div>
           <div className="today-pick__image-wrapper">
-            <img className="today-pick__image" src={pickedMeal.imageSrc} alt="Picked meal image" />
+            <img className="today-pick__image" src={pickedMeal.imageUrl} alt="Picked meal image" />
             {lunchStatus === 'ORDERING' && <div className="today-pick__remove" onClick={unPickMeal}><RemoveIcon /></div>}
           </div>
           <div className="today-pick__name">{pickedMeal.name}</div>
@@ -112,7 +112,7 @@ class Index extends React.Component {
             <div className="confirm">
               <div className="confirm__message">{!isConfirmed && 'Your lunch is ready!'}</div>
               <div className="confirm__meal">
-                <img className="confirm__meal-image" src={pickedMeal.imageSrc} alt="PickedMeal" />
+                <img className="confirm__meal-image" src={pickedMeal.imageUrl} alt="PickedMeal" />
                 <div className="confirm__meal-answer-tab">
                   {!isConfirmed
                   ? <>
@@ -145,7 +145,7 @@ class Index extends React.Component {
             <div className="picked__title">Previous</div>
             {previousPicks.map((p, i) =>
               <div className="previous-picks__image-wrapper">
-                <img key={i} className="previous-picks__image" src={p.imageSrc} alt="Previous picked" />
+                <img key={i} className="previous-picks__image" src={p.imageUrl} alt="Previous picked" />
               </div>
             )}
           </div>

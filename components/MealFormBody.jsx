@@ -2,11 +2,12 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { runInAction } from 'mobx';
 import Router from 'next/router';
+import PropTypes from 'prop-types';
 
-export default observer(({ meal, uploadImage }) =>
+const MealFormBody = observer(({ meal, uploadImage }) =>
   <div className="meal-form__body">
     <div className="meal-form__image-wrapper">
-      <img className="meal-form__image" src={meal.imageSrc} />
+      <img className="meal-form__image" src={meal.imageUrl} />
       <div className="upload-btn-wrapper">
         <button className="btn btn--update">Choose image</button>
         <input type="file" name="meal[image]" onChange={uploadImage} accept="image/x-png,image/jpeg" />
@@ -24,3 +25,10 @@ export default observer(({ meal, uploadImage }) =>
     </div>
   </div>
 )
+
+MealFormBody.propTypes = {
+  meal: PropTypes.object.isRequired,
+  uploadImage: PropTypes.func.isRequired
+}
+
+export default MealFormBody;

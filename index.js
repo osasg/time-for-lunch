@@ -38,19 +38,19 @@ co(function * () {
 
   const app = express();
 
-  app.use(cookieParser());
-  app.use(helmet());
-  app.use(morgan(morganFormat, { stream: logger.stream }));
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
-  app.use(express.static('public'));
-
   app.use((req, res, next) => {
     req.db = db;
     req.repos = repos;
     req.logger = logger;
     next();
   })
+
+  app.use(cookieParser());
+  app.use(helmet());
+  app.use(morgan(morganFormat, { stream: logger.stream }));
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
+  app.use(express.static('public'));
 
   app.use(requestMiddleware.wirePreRequest);
   app.use('/api/', apiRoute);

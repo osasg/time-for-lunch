@@ -64,7 +64,7 @@ const AdminMeals = observer((props) => {
           searchable={true}
           newResourceBtn={newMeal}
           headName="Meals"
-          handleSearchResources={() => searchMeals({ variables: { pattern: searchStr } })}
+          handleSearchResources={() => searchMeals({ variables: { pattern: state.searchStr } })}
           parentState={state}
         />
         <div className="meals-list resources-list">

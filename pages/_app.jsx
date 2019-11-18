@@ -6,6 +6,7 @@ import ApolloClient from 'apollo-client';
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import fetch from 'node-fetch';
 import { createHttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client';
 import jwt from 'jsonwebtoken';
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import co from 'co';
@@ -41,7 +42,7 @@ class CurrentUser {
 const currentUser = new CurrentUser();
 
 const client = new ApolloClient({
-  link: createHttpLink({
+  link: createUploadLink({
     uri: 'http://localhost:3000/graphql',
     fetch
   }),

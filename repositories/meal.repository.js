@@ -13,7 +13,7 @@ module.exports = ({ db }) => {
   }
 
   const update = async ({ _id, name, imageUrl }) => {
-    const response = await collection.updateOne({ _id: ObjectId(id) }, { $set: {
+    const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: {
       name, imageUrl
     }});
 
