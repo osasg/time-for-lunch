@@ -14,14 +14,17 @@ const objectIdWithTimeStamp = (timeStamp) => {
 }
 
 module.exports = ({ db }) => {
-  const collection = db.collection('todayLunches');
+  const collection = db.collection('lunches');
 
   const findById = async ({ _id }) => {
     return collection.findOne({ _id: ObjectId(_id) });
   }
 
   const findLunchForToday = async () => {
-    return collection.findOne({ _id: { $gt: objectIdWithTimeStamp(new Date()) } });
+    const now = new Date();
+    const date = `${now.getFullYear()}/${now.getMonth()}/${now.getDate()}`;
+
+    return collection.findOne({ date });
   }
 
   const create = async ({ meal_ids, date }) => {
@@ -47,27 +50,27 @@ module.exports = ({ db }) => {
   }
 
   const updateWithAccount = async ({ _id, account_id, meal_id }) => {
-    const todayLunch = await findById({ _id });
+    const lunch = await findById({ _id });
 
-    if (todayLunch.lunchStatus !== 'ORDERING')
+    if (lunch.status !== 'ORDERING')
       return null;
 
-    for (let m in todayLunch.meals) {
+    for (let m in lunch.meals) {
       m.pickers = m.pickers.filter(p => p.account_id === account_id);
     }
 
     if (meal_id) {
-      todayLunch.meals.find(m => m.id === meal_id)
+      lunch.meals.find(m => m.id === meal_id)
         .pickers
         .push({ account_id, isConfirmed: false });
     }
 
-    const result = await collection.updateOne({ _id: ObjectId(_Id) }, { $set: { meals: todayLunch.meals } });
+    const result = await collection.updateOne({ _id: ObjectId(_Id) }, { $set: { meals: lunch.meals } });
     return result.ops[0];
   }
 
-  const updateLunchStatus = async ({ _id, lunchStatus }) => {
-    const result = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { lunchStatus } });
+  const updateLunchStatus = async ({ _id, status }) => {
+    const result = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { status } });
 
     return result.ops[0];
   }
@@ -83,7 +86,7 @@ module.exports = ({ db }) => {
   }
 
   const search = async ({ pattern = '', page = 0, perPage = 20 }) => {
-    const todayLunches = [];
+    const lunches = [];
     let tl;
     pattern = pattern.split("\s").map(p => parseInt(p));
 
@@ -97,9 +100,9 @@ module.exports = ({ db }) => {
       .limit(perPage);
 
     while (tl = await cursor.next())
-      todayLunches.push(tl);
+      lunches.push(tl);
 
-    return todayLunches;
+    return lunches;
   }
 
   return {

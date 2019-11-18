@@ -6,14 +6,14 @@ import DashboardNav from '../../components/DashboardNav';
 
 import MealsIcon from '../../public/icons/meals.svg';
 import UsersIcon from '../../public/icons/users.svg';
-import TodayLunchIcon from '../../public/icons/today-lunch.svg';
+import LunchesIcon from '../../public/icons/lunches.svg';
 import AnalystIcon from '../../public/icons/analyst.svg';
 import DeliveryIcon from '../../public/icons/delivery.svg';
 
 const icons = {
   MealsIcon,
   UsersIcon,
-  TodayLunchIcon,
+  LunchesIcon,
   AnalystIcon,
   DeliveryIcon
 };
@@ -37,7 +37,7 @@ const AdminIndex = () => {
       <DashboardNav currentBoard={'Home'} />
       <Board name="Meals"/>
       <Board name="Users"/>
-      <Board name="TodayLunch"/>
+      <Board name="Lunches"/>
       <Board name="Analyst"/>
       <Board name="Delivery"/>
     </div>

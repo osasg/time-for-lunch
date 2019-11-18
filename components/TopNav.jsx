@@ -9,7 +9,7 @@ export default inject(['currentUser'])(observer(({ currentUser }) => {
     <div className="top-nav">
       <div className="top-nav-wrapper">
         <div className="top-nav__logo">
-          <Link href="/lunch"><a>Time for lunch</a></Link>
+          <Link href="/"><a>Time for lunch</a></Link>
         </div>
         <div className="top-nav__admin-link">
           <Link href="/admin"><a>Admin</a></Link>

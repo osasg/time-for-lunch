@@ -70,7 +70,7 @@ class LoginState {
       return;
     }
     global.Router = Router;
-    Router.push('/lunch');
+    Router.push('/');
   }
 }
 

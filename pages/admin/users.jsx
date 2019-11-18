@@ -13,8 +13,6 @@ import WhiteLockedIcon from '../../public/icons/white-locked.svg';
 import WhiteUnlockedIcon from '../../public/icons/white-unlocked.svg';
 import WhiteRemoveIcon from '../../public/icons/white-remove.svg';
 
-import data from '../../data-sample.json';
-
 class AdminUsersState {
   @observable searchStr = '';
   @observable users = null;
@@ -32,7 +30,7 @@ const AdminUsers = observer((props) => {
     const action = e.currentTarget.querySelector('.user-view__action');
   }
 
-  const [ searchUsers, { loading, data }] = useLazyQuery(gql`
+  const [ searchUsers, { loading, data, error }] = useLazyQuery(gql`
     query SearchUsers($pattern: String = "", $page: Int = 0, $perPage: Int = 20){
       users(search: { pattern: $pattern, page: $page, perPage: $perPage }) {
         _id
@@ -43,6 +41,9 @@ const AdminUsers = observer((props) => {
     }
   `);
 
+  if (error)
+    return console.error(error);
+
   if (loading)
     return <></>;
 
@@ -52,6 +53,7 @@ const AdminUsers = observer((props) => {
   }
 
   if(!data && !state.users) {
+    console.log('query')
     state.isReadyToUpdate = true;
     searchUsers({ variables: { pattern: '' } });
   }

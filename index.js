@@ -64,7 +64,7 @@ co(function * () {
     context: async ({ req }) => {
       let user = null;
       try {
-        const token = req.headers.authorization;
+        const token = req.cookies.token;
 
         if (token) {
           const { _id } = jwt.verify(token, process.env.JWT_SECRET);

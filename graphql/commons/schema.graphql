@@ -1,18 +1,18 @@
 type Query {
-  lunch(token: String!): Lunch
+  timeForLunch(token: String!): TimeForLunch
 }
 
-type Lunch {
-  todayLunch: [TodayLunch]
+type TimeForLunch {
+  lunch: [Lunch]
   lunchStatus: LunchStatus
   isConfirmed: Boolean
   previousPicks: [Meal]
 }
 
-type TodayLunch {
+type Lunch {
   _id: ID
   status: LunchStatus
-  created_at: String
+  date: String
   meals: [LunchMeal]
 }
 
@@ -49,6 +49,7 @@ input SearchInput {
 
 enum LunchStatus {
   PREPARING,
+  SUSPENDING,
   ORDERING,
   COOKING,
   DELIVERING

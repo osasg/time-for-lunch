@@ -1,0 +1,10 @@
+type Query {
+  lunches(search: SearchInput!): [Lunch]
+}
+
+type Mutation {
+  createLunch(meal_ids: [ID!]!, date: String!): Lunch
+  updateLunch(_id: ID!, meal_ids: [ID!]!): Lunch
+  pickLunch(account_id: ID!, meal_id: ID, _id: ID!): Lunch
+  updateLunchStatus(_id: ID!, status: Boolean!): Boolean
+}
