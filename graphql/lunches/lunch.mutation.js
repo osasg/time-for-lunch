@@ -7,12 +7,16 @@ module.exports = {
     return lunch;
   },
   updateLunch: async (root, { _id, meal_ids, date }, { repos }) => {
-    const [ err, lunch ] = await to(repos.Lunch.update({ _id, meal_ids, date }));
+    const [ err0 ] = await to(repos.Lunch.update({ _id, meal_ids, date }));
 
-    return lunch;
+    const [ err1, lunch ] = await to(repos.Lunch.findById({ _id }));
+
+    return ;
   },
-  pickLunch: async (root, { account_id, meal_id, _id }, { repos }) => {
-    const [ err, lunch ] = await to(repos.Lunch.updateWithAccount({ account_id, _id, meal_id }));
+  pickLunch: async (root, { meal_id, _id }, { repos, user }) => {
+    const [ err0 ] = await to(repos.Lunch.updateWithAccount({ account_id: user._id, _id, meal_id }));
+
+    const [ err1, lunch ] = await to(repos.Lunch.findById({ _id }));
 
     return lunch;
   },
@@ -20,5 +24,12 @@ module.exports = {
     const [ err, result ] = await to(repos.Lunch.updateLunchStatus({ _id, status }));
 
     return result;
+  },
+  confirmLunch: async (root, { _id }, { repos, user }) => {
+    const [ err0, result ] = await to(repos.Lunch.updateConfirm({ _id, account_id: user._id }));
+
+    const [ err1, lunch ] = await to(repos.Lunch.findById({ _id }));
+
+    return lunch;
   }
 }

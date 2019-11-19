@@ -39,6 +39,7 @@ class CurrentUser {
     (this.requireAuth() && this.roles.includes(role)) || this.redirectToLoginPage()
 }
 
+// currentUser init in both server and client
 const currentUser = new CurrentUser();
 
 const client = new ApolloClient({
@@ -77,7 +78,9 @@ const client = new ApolloClient({
           throw new Error('User is required');
       }
 
-      const { username, fullname, email, avatarUrl, roles } = user;
+      const { _id, username, fullname, email, avatarUrl, roles } = user;
+
+      currentUser._id = _id.toString();
       currentUser.username = username;
       currentUser.fullname = fullname;
       currentUser.email = email;
@@ -86,6 +89,7 @@ const client = new ApolloClient({
 
       // initial props after update currentUser state
       return {
+        user: currentUser, // pass currentUser state to client side via props
         pageProps: Component.getInitialProps
           ? await Component.getInitialProps({ ...ctx, currentUser })
           : {}
@@ -104,12 +108,31 @@ const client = new ApolloClient({
     }
   }
 
+  constructor(props) {
+    super(props);
+
+    if (!props.user)
+      return;
+
+    const { _id, username, fullname, email, avatarUrl, roles } = props.user;
+
+    // get state from server side and assign it to client side
+    runInAction(() => {
+      currentUser._id = _id.toString();
+      currentUser.username = username;
+      currentUser.fullname = fullname;
+      currentUser.email = email;
+      currentUser.avatarUrl = avatarUrl;
+      currentUser.roles = roles;
+    });
+  }
+
   componentDidCatch(error, info) {
     console.log(error, info);
   }
 
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, user } = this.props;
 
     return (
       <Provider currentUser={currentUser}>

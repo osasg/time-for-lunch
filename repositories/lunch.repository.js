@@ -43,16 +43,8 @@ module.exports = ({ db }) => {
 
     lunch = await withMeals(lunch);
 
-    switch (lunch.status) {
-      case 'ORDERING':
-      case 'COOKING':
-        return {
-          lunch,
-          previousPicks: []
-        }
-    }
-
     return {
+      lunch,
       previousPicks: []
     }
   }
@@ -77,34 +69,47 @@ module.exports = ({ db }) => {
     await collection.updateOne({ _id: ObjectId(_id) }, { $set: {
       meals, date, status: 'SUSPENDING'
     } });
-
-    return findById({ _id });
   }
 
   const updateWithAccount = async ({ _id, account_id, meal_id }) => {
-    const lunch = await findById({ _id });
+    const lunch = await collection.findOne({ _id: ObjectId(_id) });
 
     if (lunch.status !== 'ORDERING')
       return null;
 
-    for (let m in lunch.meals) {
+    for (let m of lunch.meals) {
       m.pickers = m.pickers.filter(p => p.account_id === account_id);
     }
 
     if (meal_id) {
-      lunch.meals.find(m => m.id === meal_id)
+      lunch.meals.find(m => m.meal_id === meal_id)
         .pickers
-        .push({ account_id, isConfirmed: false });
+        .push({ account_id: account_id.toString(), isConfirmed: false });
     }
 
-    const response = await collection.updateOne({ _id: ObjectId(_Id) }, { $set: { meals: lunch.meals } });
-    return response.ops[0];
+    collection.updateOne({ _id: ObjectId(_id) }, { $set: { meals: lunch.meals } });
   }
 
   const updateLunchStatus = async ({ _id, status }) => {
     const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { status } });
 
     return response.result.nModified;
+  }
+
+  const updateConfirm = async ({ _id, account_id }) => {
+    const lunch = await collection.findOne({ _id: ObjectId(_id) });
+
+    if (lunch.status !== 'DELIVERING')
+      return;
+
+    for (let m of lunch.meals) {
+      for (let a of m.pickers) {
+        if (a.account_id === account_id.toString())
+          a.isConfirmed = true;
+      }
+    }
+
+    collection.updateOne({ _id: ObjectId(_id) }, { $set: { meals: lunch.meals } });
   }
 
   const remove = async ({ _id }) => {
@@ -147,6 +152,7 @@ module.exports = ({ db }) => {
     update,
     updateWithAccount,
     updateLunchStatus,
+    updateConfirm,
     remove,
     removeMany,
     search

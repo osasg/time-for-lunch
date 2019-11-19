@@ -15,7 +15,6 @@ import RemoveIcon from '../public/icons/remove.svg';
 @observer
 class Index extends React.Component {
   static async getInitialProps({ req, currentUser }) {
-    console.log('hi', currentUser.username)
     currentUser.requireAuth();
 
     if (req) {
@@ -47,7 +46,7 @@ class Index extends React.Component {
         }
       `
     }));
-    console.log(res.data.data)
+
     if (err) {
       console.error(err);
       return {};
@@ -63,41 +62,67 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
 
-    const todayPick = props.lunch && props.lunch.meals
-      ? props.lunch.meals
-        .find(m => m.pickers
-          .find(p => p.account_id === this.props.currentUser._id)) || {}
-      : {};
-
-    const isConfirmed = todayPick.pickers
-      ? todayPick.pickers.find(p => p.account_id === this.props.currentUser._id).isConfirmed
-      : false;
-
     extendObservable(this, {
       lunch: props.lunch || {},
       previousPicks: props.previousPick || [],
-      isLocked: false,
+      isBlocked: false,
       filteredMeals: []
     });
   }
 
-  @action requestPickMeal = m_id => {
-    if (this.isLocked)
+  @action requestPickMeal = async m_id => {
+    if (this.isBlocked || this.lunch.status !== 'ORDERING')
       return;
 
-    this.todayPick = m_id;
     this.lunch.status = 'LOCKED';
-    setTimeout(() => {
-      runInAction(() => this.lunch.status = 'ORDERING');
-    }, 1200);
+    const [ err, res ] = await to(axios.post('/graphql', {
+      query: `
+        mutation PickLunch($meal_id: ID, $_id: ID!) {
+          pickLunch(meal_id: $meal_id, _id: $_id) {
+            status
+            meals {
+              meal_id, name, imageUrl
+              pickers {
+                account_id, isConfirmed
+              }
+            }
+          }
+        }
+      `,
+      variables: { meal_id: m_id, _id: this.lunch._id }
+    }));
+
+    if (err)
+      return console.error(err);
+
+    const { meals, status } = res.data.data.pickLunch;
+    this.lunch.meals = meals;
+    this.lunch.status = status;
   }
 
-  @action requestUnPickMeal = () => {
-    this.todayPick = null;
-  }
+  @action requestConfirmMeal = async () => {
+    const [ err, res ] = await to(axios.post('/graphql', {
+      query: `
+        mutation ConfirmLunch {
+          confirmLunch(_id: "${this.lunch._id}") {
+            meals {
+              meal_id, name, imageUrl
+              pickers {
+                account_id, isConfirmed
+              }
+            }
+            status
+          }
+        }
+      `
+    }))
 
-  @action requestConfirmMeal = () => {
-    this.isConfirmed = true;
+    if (err)
+      return console.error(err);
+
+    const { meals, status } = res.data.data.confirmLunch;
+    this.lunch.meals = meals;
+    this.lunch.status = status;
   }
 
   @action handleSearch = str => {
@@ -115,14 +140,24 @@ class Index extends React.Component {
 
   render() {
     const {
-      lunch, isLocked, isConfirmed,
-      todayPick, previousPicks,
-      requestPickMeal, requestUnPickMeal, requestConfirmMeal,
+      lunch, isBlocked,
+      previousPicks,
+      requestPickMeal, requestConfirmMeal,
       filteredMeals,
       handleSearch
     } = this;
 
-    const searchingArea = isLocked
+    const todayPick = lunch && lunch.meals
+      ? lunch.meals
+        .find(m => m.pickers
+          .find(p => p.account_id === this.props.currentUser._id))
+      : null;
+
+    const isConfirmed = todayPick && todayPick.pickers
+      ? todayPick.pickers.find(p => p.account_id === this.props.currentUser._id).isConfirmed
+      : false;
+
+    const searchingArea = isBlocked
       ? <div className="locked">You are being locked!</div>
       : <SearchBox handleSearch={handleSearch}/>
       ;
@@ -132,7 +167,7 @@ class Index extends React.Component {
           <div className="picked__title">Today pick</div>
           <div className="today-pick__image-wrapper">
             <img className="today-pick__image" src={todayPick.imageUrl} alt="Picked meal image" />
-            {lunch.status === 'ORDERING' && <div className="today-pick__remove" onClick={requestUnPickMeal}><RemoveIcon /></div>}
+            {lunch.status === 'ORDERING' && <div className="today-pick__remove" onClick={() => requestPickMeal(null)}><RemoveIcon /></div>}
           </div>
           <div className="today-pick__name">{todayPick.name}</div>
         </div>
@@ -155,7 +190,8 @@ class Index extends React.Component {
       <div className="time-for-lunch">
         <TopNav />
         {
-          lunch.status === 'COMFIRMING'
+          todayPick
+          && lunch.status === 'DELIVERING'
           && <>
             <div className="confirm">
               <div className="confirm__message">{!isConfirmed && 'Your lunch is ready!'}</div>
@@ -176,33 +212,28 @@ class Index extends React.Component {
                 </div>
               </div>
             </div>
-            <style jsx global>{`
-              .search, .meal {
-                display: none;
-              }
-            `}</style>
           </>
         }
-        <div className="search">
+        <div className={classnames('search', { 'hidden': lunch.status === 'DELIVERING' })}>
           {searchingArea}
-          {lunch.status === 'LOCKED' && <div className="system-locked">System has locked</div>}
+          {lunch.status !== 'ORDERING' && <div className="system-locked">System has locked</div>}
         </div>
         <div className="picked">
           {todayPickArea}
           <div className="previous-picks">
             <div className="picked__title">Previous</div>
             {previousPicks.map((p, i) =>
-              <div className="previous-picks__image-wrapper">
-                <img key={i} className="previous-picks__image" src={p.imageUrl} alt="Previous picked" />
+              <div key={p._id} className="previous-picks__image-wrapper">
+                <img className="previous-picks__image" src={p.imageUrl} alt="Previous picked" />
               </div>
             )}
           </div>
         </div>
-        <div className={classnames({ "todaymeals-list": true, "half-opacity": lunch.status === 'LOCKED' })}>
+        <div className={classnames({ "todaymeals-list": true, "half-opacity": lunch.status !== 'ORDERING', 'hidden': lunch.status === 'DELIVERING' })}>
           {
-            !isLocked && filteredMeals &&
-              filteredMeals.map((meal, i) =>
-                <MealView key={i} meal={meal} handleOnClick={() => requestPickMeal(meal.id)}/>
+            !isBlocked && filteredMeals &&
+              filteredMeals.map(m =>
+                <MealView key={m._id} meal={m} handleOnClick={() => requestPickMeal(m.meal_id)}/>
           )}
         </div>
       </div>
