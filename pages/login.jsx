@@ -69,8 +69,8 @@ class LoginState {
       }
       return;
     }
-    global.Router = Router;
-    Router.push('/');
+
+    Router.push('/home');
   }
 }
 

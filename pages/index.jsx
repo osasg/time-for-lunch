@@ -15,6 +15,7 @@ import RemoveIcon from '../public/icons/remove.svg';
 @observer
 class Index extends React.Component {
   static async getInitialProps({ req, currentUser }) {
+    console.log('hi', currentUser.username)
     currentUser.requireAuth();
 
     if (req) {
@@ -46,7 +47,7 @@ class Index extends React.Component {
         }
       `
     }));
-
+    console.log(res.data.data)
     if (err) {
       console.error(err);
       return {};

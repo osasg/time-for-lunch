@@ -52,13 +52,16 @@ const client = new ApolloClient({
 @observer class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
     const { req, res } = ctx;
-    let pageProps = Component.getInitialProps
-      ? await Component.getInitialProps({ ...ctx, currentUser })
-      : {};
 
+    // routing in client side, already have currentUser
     if (!req)
-      return { pageProps };
+      return {
+        pageProps: Component.getInitialProps
+          ? await Component.getInitialProps({ ...ctx, currentUser })
+          : {}
+      };
 
+    // server side, retrieve user from auth.requireAuth middleware
     let user = req.user;
 
     try {
@@ -74,33 +77,35 @@ const client = new ApolloClient({
           throw new Error('User is required');
       }
 
-      return { pageProps, user: {
-        username: user.username,
-        fullname: user.fullname,
-        email: user.email,
-        avatarUrl: user.avatarUrl,
-        roles: user.roles
-      }};
+      const { username, fullname, email, avatarUrl, roles } = user;
+      currentUser.username = username;
+      currentUser.fullname = fullname;
+      currentUser.email = email;
+      currentUser.avatarUrl = avatarUrl;
+      currentUser.roles = roles;
+
+      // initial props after update currentUser state
+      return {
+        pageProps: Component.getInitialProps
+          ? await Component.getInitialProps({ ...ctx, currentUser })
+          : {}
+      };
 
     } catch (err) {
+      // token invalid or expired
+      // still render if not require Auth
+      // currentUser.name is empty
       res.clearCookie('token');
-      return { pageProps, user: {} };
+      return {
+        pageProps: Component.getInitialProps
+          ? await Component.getInitialProps({ ...ctx, currentUser })
+          : {}
+      };
     }
   }
 
   componentDidCatch(error, info) {
     console.log(error, info);
-  }
-
-  componentWillMount() {
-    const { username, fullname, email, avatarUrl, roles } = this.props.user;
-    currentUser.username = username;
-    currentUser.fullname = fullname;
-    currentUser.email = email;
-    currentUser.avatarUrl = avatarUrl;
-    currentUser.roles = roles;
-
-    return null;
   }
 
   render() {
