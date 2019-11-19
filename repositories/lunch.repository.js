@@ -35,10 +35,26 @@ module.exports = ({ db }) => {
 
   const findLunchForToday = async () => {
     const now = new Date();
-    const date = `${now.getFullYear()}/${now.getMonth()}/${now.getDate()}`;
+    const date = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
 
-    const lunch = await collection.findOne({ date });
-    return withMeals(lunch);
+    let lunch = await collection.findOne({ date });
+    if (!lunch)
+      return {};
+
+    lunch = await withMeals(lunch);
+
+    switch (lunch.status) {
+      case 'ORDERING':
+      case 'COOKING':
+        return {
+          lunch,
+          previousPicks: []
+        }
+    }
+
+    return {
+      previousPicks: []
+    }
   }
 
   const create = async ({ meal_ids, date }) => {
@@ -126,6 +142,7 @@ module.exports = ({ db }) => {
 
   return {
     findById,
+    findLunchForToday,
     create,
     update,
     updateWithAccount,

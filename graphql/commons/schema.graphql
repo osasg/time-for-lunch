@@ -1,11 +1,10 @@
 type Query {
-  timeForLunch(token: String!): TimeForLunch
+  timeForLunch: TimeForLunch
 }
 
 type TimeForLunch {
-  lunch: [Lunch]
-  lunchStatus: LunchStatus
-  isConfirmed: Boolean
+  lunch: Lunch
+  isLocked: Boolean
   previousPicks: [Meal]
 }
 

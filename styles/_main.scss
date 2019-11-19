@@ -842,7 +842,14 @@ body {
 
   .dms-search {
     position: relative;
-    flex: 1 1 0;
+  }
+
+  .dms-day-picker {
+    margin-left: 12px;
+  }
+
+  .dms-btn-group {
+    margin-left: auto;
   }
 
   .dms-search__list-wrapper {

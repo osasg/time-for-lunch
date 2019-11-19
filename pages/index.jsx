@@ -1,7 +1,9 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import { observable, action, runInAction, extendObservable } from 'mobx';
+import { observable, action, runInAction, extendObservable, computed } from 'mobx';
 import classnames from 'classnames';
+import to from 'await-to-js';
+import axios from 'axios';
 
 import TopNav from '../components/TopNav';
 import MealView from '../components/MealView';
@@ -12,81 +14,126 @@ import RemoveIcon from '../public/icons/remove.svg';
 @inject(['currentUser'])
 @observer
 class Index extends React.Component {
-  static async getInitialProps({ currentUser }) {
-    currentUser.isAuth();
-    return {};
+  static async getInitialProps({ req, currentUser }) {
+    currentUser.requireAuth();
+
+    if (req) {
+      const [ err, timeForLunch ] = await to(req.repos.Lunch.findLunchForToday());
+      if (!timeForLunch)
+        return {};
+
+      const { lunch, previousPicks } = timeForLunch;
+      return { lunch, previousPicks };
+    }
+
+    const [ err, res ] = await to(axios.post('/graphql', {
+      query: `
+        {
+          timeForLunch {
+            previousPicks {
+              _id, name
+            }
+            lunch {
+              _id, status, date
+              meals {
+                meal_id, name, imageUrl
+                pickers {
+                  account_id, isConfirmed
+                }
+              }
+            }
+          }
+        }
+      `
+    }));
+
+    if (err) {
+      console.error(err);
+      return {};
+    }
+
+    if (!res.data.data.timeForLunch)
+      return {};
+
+    const { lunch, previousPicks } = res.data.data.timeForLunch;
+      return { lunch, previousPicks };
   }
 
   constructor(props) {
     super(props);
 
+    const todayPick = props.lunch && props.lunch.meals
+      ? props.lunch.meals
+        .find(m => m.pickers
+          .find(p => p.account_id === this.props.currentUser._id)) || {}
+      : {};
+
+    const isConfirmed = todayPick.pickers
+      ? todayPick.pickers.find(p => p.account_id === this.props.currentUser._id).isConfirmed
+      : false;
+
     extendObservable(this, {
-      todayMeals: [],
-      todayPick: null,
-      previousPicks: [],
+      lunch: props.lunch || {},
+      previousPicks: props.previousPick || [],
       isLocked: false,
-      lunchStatus: '',
-      isConfirm: false,
       filteredMeals: []
     });
   }
 
-  @action pickMeal = m_id => {
+  @action requestPickMeal = m_id => {
     if (this.isLocked)
       return;
 
     this.todayPick = m_id;
-    this.lunchStatus = 'LOCKED';
+    this.lunch.status = 'LOCKED';
     setTimeout(() => {
-      runInAction(() => this.lunchStatus = 'ORDERING');
+      runInAction(() => this.lunch.status = 'ORDERING');
     }, 1200);
   }
 
-  @action unPickMeal = () => {
+  @action requestUnPickMeal = () => {
     this.todayPick = null;
   }
 
-  @action confirm = () => {
+  @action requestConfirmMeal = () => {
     this.isConfirmed = true;
   }
 
   @action handleSearch = str => {
     const strToFilter = str.toLowerCase().split(/\s/).join('');
-    this.filteredMeals = this.todayMeals.filter(m =>
+    this.filteredMeals = this.lunch.meals.filter(m =>
       m.name.toLowerCase().split(/\s/).join('').includes(strToFilter));
   }
 
-  componentWillMount() {
+  componentDidMount() {
     runInAction(() => {
-      this.filteredMeals = this.todayMeals;
+      if (this.lunch && this.lunch.meals)
+        this.filteredMeals = this.lunch.meals;
     });
   }
 
   render() {
     const {
-      todayPick, todayMeals, previousPicks,
-      lunchStatus, isLocked, isConfirmed,
-      pickMeal, unPickMeal, confirm,
+      lunch, isLocked, isConfirmed,
+      todayPick, previousPicks,
+      requestPickMeal, requestUnPickMeal, requestConfirmMeal,
       filteredMeals,
       handleSearch
     } = this;
-
-    const { currentUser } = this.props;
-    const pickedMeal = todayMeals.find(({ id }) => id === todayPick);
 
     const searchingArea = isLocked
       ? <div className="locked">You are being locked!</div>
       : <SearchBox handleSearch={handleSearch}/>
       ;
 
-    const todayPickArea = pickedMeal
+    const todayPickArea = todayPick
       ? <div className="today-pick">
           <div className="picked__title">Today pick</div>
           <div className="today-pick__image-wrapper">
-            <img className="today-pick__image" src={pickedMeal.imageUrl} alt="Picked meal image" />
-            {lunchStatus === 'ORDERING' && <div className="today-pick__remove" onClick={unPickMeal}><RemoveIcon /></div>}
+            <img className="today-pick__image" src={todayPick.imageUrl} alt="Picked meal image" />
+            {lunch.status === 'ORDERING' && <div className="today-pick__remove" onClick={requestUnPickMeal}><RemoveIcon /></div>}
           </div>
-          <div className="today-pick__name">{pickedMeal.name}</div>
+          <div className="today-pick__name">{todayPick.name}</div>
         </div>
 
       : <div className="today-pick">
@@ -107,22 +154,22 @@ class Index extends React.Component {
       <div className="time-for-lunch">
         <TopNav />
         {
-          lunchStatus === 'COMFIRMING'
+          lunch.status === 'COMFIRMING'
           && <>
             <div className="confirm">
               <div className="confirm__message">{!isConfirmed && 'Your lunch is ready!'}</div>
               <div className="confirm__meal">
-                <img className="confirm__meal-image" src={pickedMeal.imageUrl} alt="PickedMeal" />
+                <img className="confirm__meal-image" src={todayPick.imageUrl} alt="TodayPick" />
                 <div className="confirm__meal-answer-tab">
                   {!isConfirmed
                   ? <>
                       <div className="confirm__question">
-                        Have you eaten <span className="confirm__meal-name">{pickedMeal.name}</span> yet?
+                        Have you eaten <span className="confirm__meal-name">{todayPick.name}</span> yet?
                       </div>
-                      <button className="btn btn__confirm-meal" onClick={confirm}>Confirm</button>
+                      <button className="btn btn__confirm-meal" onClick={requestConfirmMeal}>Confirm</button>
                     </>
                   : <>
-                      <span className="confirm__meal-name">{pickedMeal.name}</span>
+                      <span className="confirm__meal-name">{todayPick.name}</span>
                       <div className="confirm__confirmed">Comfirmed</div>
                     </>}
                 </div>
@@ -137,7 +184,7 @@ class Index extends React.Component {
         }
         <div className="search">
           {searchingArea}
-          {lunchStatus === 'LOCKED' && <div className="system-locked">System has locked</div>}
+          {lunch.status === 'LOCKED' && <div className="system-locked">System has locked</div>}
         </div>
         <div className="picked">
           {todayPickArea}
@@ -150,9 +197,11 @@ class Index extends React.Component {
             )}
           </div>
         </div>
-        <div className={classnames({ "todaymeals-list": true, "half-opacity": lunchStatus === 'LOCKED' })}>
-          {!isLocked && filteredMeals.map((meal, i) =>
-            <MealView key={i} meal={meal} handleOnClick={() => pickMeal(meal.id)}/>
+        <div className={classnames({ "todaymeals-list": true, "half-opacity": lunch.status === 'LOCKED' })}>
+          {
+            !isLocked && filteredMeals &&
+              filteredMeals.map((meal, i) =>
+                <MealView key={i} meal={meal} handleOnClick={() => requestPickMeal(meal.id)}/>
           )}
         </div>
       </div>

@@ -35,7 +35,8 @@ const numberStatuses = [
   @observable lunch = {
     _id: null,
     meals: [],
-    status: statuses.PREPARING
+    status: statuses.PREPARING,
+    date: ''
   };
 
   componentDidMount() {
@@ -85,7 +86,7 @@ const numberStatuses = [
       const variables = {
         _id: lunch._id,
         meal_ids: lunch.meals.map(({ _id }) => _id),
-        date: lunch.date || '2019/11/12'
+        date: lunch.date
       };
 
       const [ err, res ] = await to(axios.post('/graphql', { query , variables }));
@@ -160,7 +161,7 @@ const numberStatuses = [
           <AdminHead headName="Lunches" searchable={false} />
           <div className="select-meal">
             <DashboardMealsSearch
-              lunchStatus={lunch.status}
+              lunch={this.lunch}
               handleAddTodayMeal={addTodayMeal}
               requestUpdateStatus={requestUpdateStatus}
             />

@@ -3,13 +3,10 @@ const { to } = require('await-to-js');
 
 module.exports = {
   timeForLunch: async (root, { token }, { repos, user }) => {
-    const [ err, lunch ] = await to(repos.Lunch.findLunchForToday());
+    const [ err, timeForLunch ] = await to(repos.Lunch.findLunchForToday());
+    if (err)
+      return {};
 
-    return {
-      lunch,
-      lunchStatus: lunch.status,
-      isConfirmed: false,
-      previousPicks: []
-    }
+    return timeForLunch;
   }
 }

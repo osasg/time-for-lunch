@@ -128,13 +128,13 @@ Login.getInitialProps = async ({ req, res, currentUser }) => {
   if (req) {
     if (req.cookies.token){
       res.writeHead(302, {
-        location: '/lunch'
+        location: '/'
       });
       res.end();
     }
   } else {
     if (currentUser.isAuth())
-      Router.push('/lunch');
+      Router.push('/');
   }
 
   return {};

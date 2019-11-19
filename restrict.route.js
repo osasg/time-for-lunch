@@ -1,7 +1,7 @@
 const { authMiddleware: auth } = require('./middlewares/');
 
 module.exports = app => {
-  app.get('/home', (req, res) => res.redirect('/'));
+  app.get([ '/lunch', '/home' ], (req, res) => res.redirect('/'));
 
   app.get('/', auth.requireAuth);
 

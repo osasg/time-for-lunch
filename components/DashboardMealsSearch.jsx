@@ -38,7 +38,7 @@ import DMSList from './DMSList';
 
   render() {
     const { visibleSearchList, handleSearch, searchStr } = this;
-    const { requestUpdateStatus, lunchStatus, handleAddTodayMeal } = this.props;
+    const { requestUpdateStatus, lunch, handleAddTodayMeal } = this.props;
 
     return (
       <div className="d-meals-search">
@@ -48,17 +48,22 @@ import DMSList from './DMSList';
             <DMSList searchStr={searchStr} handleAddTodayMeal={handleAddTodayMeal}  />
           </div>
         </div>
-        {lunchStatus !== 'PREPARING' && lunchStatus !== 'DELIVERED' && <button className="btn btn--cancel" onClick={() => requestUpdateStatus(-1)}>Cancel</button>}
-        <button className="btn btn__lunch-status" onClick={() => requestUpdateStatus(1)}>
-          {{
-            PREPARING: 'SAVE',
-            SUSPENDING: 'ORDER',
-            ORDERING: 'COOK',
-            COOKING: 'DELIVERY',
-            DELIVERING: 'DONE',
-            DELIVERED: '----'
-          }[lunchStatus]}
-        </button>
+        <div className="dms-day-picker">
+          <input type="date" onChange={e => lunch.date = e.currentTarget.value.split('-').join('/')}/>
+        </div>
+        <div className="dms-btn-group">
+          {lunch.status !== 'PREPARING' && lunch.status !== 'DELIVERED' && <button className="btn btn--cancel" onClick={() => requestUpdateStatus(-1)}>Cancel</button>}
+          <button className="btn btn__lunch-status" onClick={() => requestUpdateStatus(1)}>
+            {{
+              PREPARING: 'SAVE',
+              SUSPENDING: 'ORDER',
+              ORDERING: 'COOK',
+              COOKING: 'DELIVERY',
+              DELIVERING: 'DONE',
+              DELIVERED: '----'
+            }[lunch.status]}
+          </button>
+        </div>
       </div>
     );
   }
