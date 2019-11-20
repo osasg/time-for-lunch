@@ -1,10 +1,10 @@
 type Query {
-  meals(search: SearchInput!): [Meal]
-  findMealById(_id: String!): Meal
+  meals(search: SearchInput!): [Meal] @requireRoleAdmin
+  findMealById(_id: String!): Meal @requireRoleAdmin
 }
 
 type Mutation {
-  createMeal(name: String!, image: Upload!): Meal
-  updateMeal(_id: ID!, name: String!, image: Upload!): Boolean
-  removeMeal(_id: ID!): Boolean
+  createMeal(name: String!, image: Upload!): Meal @requireRoleAdmin
+  updateMeal(_id: ID!, name: String!, image: Upload!): Boolean @requireRoleAdmin
+  removeMeal(_id: ID!): Boolean @requireRoleAdmin
 }

@@ -64,7 +64,7 @@ const AdminUsers = observer((props) => {
         <AdminHead
           searchable={true}
           headName="Users"
-          handleSearchResources={() => searchMeals({ variables: { pattern: searchStr } })}
+          handleSearchResources={() => searchUsers({ variables: { pattern: state.searchStr } })}
           parentState={state}
         />
         <div className="users-list resources-list">

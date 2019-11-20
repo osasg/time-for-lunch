@@ -1,5 +1,6 @@
-const { RequireAuthDirective } = require('./auth.directive');
+const { RequireAuthDirective, RequireRoleAdminDirective } = require('./auth.directive');
 
 module.exports = {
-  requireAuth: RequireAuthDirective
+  requireAuth: RequireAuthDirective,
+  requireRoleAdmin: RequireRoleAdminDirective
 };

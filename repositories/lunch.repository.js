@@ -138,7 +138,7 @@ module.exports = ({ db }) => {
       if (pattern.some(p => typeof(p) !== 'number'))
         return [];
 
-      cursor  = collection.find({ date: { $regex: new RegExp(`${pattern.join('/')}$`) } })
+      cursor  = collection.find({ date: { $regex: new RegExp(`${pattern.join('/')}`) } })
         .skip(page * perPage)
         .limit(perPage);
     }

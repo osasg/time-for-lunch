@@ -8,7 +8,7 @@ class RequireAuthDirective extends SchemaDirectiveVisitor {
     field.resolve = async function(...args) {
       const [ , , { user } ] = args;
 
-      if(!user)
+      if (!user)
         throw new Error('User not authenticated');
 
       return resolve.apply(this, args);
@@ -16,6 +16,24 @@ class RequireAuthDirective extends SchemaDirectiveVisitor {
   }
 }
 
+class RequireRoleAdminDirective extends SchemaDirectiveVisitor {
+  visitFieldDefinition(field) {
+    const { resolve = defaultFieldResolver } = field;
+    field.resolve = async function(...args) {
+      const [ , , { user } ] = args;
+
+      if (!user)
+        throw new Error('User not authenticated');
+
+      if (!user.roles.includes('ADMIN'))
+        throw new Error('User does not have permission to view this resource');
+
+      return resolve.apply(this, args);
+    };
+  }
+}
+
 module.exports = {
-  RequireAuthDirective
+  RequireAuthDirective,
+  RequireRoleAdminDirective
 }

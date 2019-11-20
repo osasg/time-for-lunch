@@ -1,10 +1,10 @@
 type Query {
-  users(search: SearchInput!): [User] @requireAuth
+  users(search: SearchInput!): [User] @requireRoleAdmin
 }
 
 type Mutation {
-  updateProfile(fullname: String!, email: String!): Boolean
-  updatePassword(currentPassword: String!, password: String!): Boolean
-  block(_id: ID, is: Boolean!): Boolean
-  remove(_id: ID): Boolean
+  updateProfile(fullname: String!, email: String!): Boolean @requireAuth
+  updatePassword(currentPassword: String!, password: String!): Boolean @requireAuth
+  block(_id: ID, is: Boolean!): Boolean @requireRoleAdmin
+  remove(_id: ID): Boolean @requireRoleAdmin
 }

@@ -1,5 +1,5 @@
 type Query {
-  timeForLunch: TimeForLunch
+  timeForLunch: TimeForLunch @requireAuth
 }
 
 type TimeForLunch {

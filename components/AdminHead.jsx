@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 
@@ -62,7 +63,9 @@ import SearchIcon from '../public/icons/search.svg';
     return (
       <div className="admin-head">
         <h1 className="admin-title">
-          {headName}
+          <Link href={`/admin/${headName.toLowerCase()}`}><a>
+            {headName}
+          </a></Link>
           {newResourceBtn}
         </h1>
         {

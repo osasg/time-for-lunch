@@ -706,6 +706,8 @@ body {
     text-transform: uppercase;
     display: flex;
     align-items: center;
+
+    a { text-decoration: none; color: $normalTextColor; }
   }
 
   .search-txt {
