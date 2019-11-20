@@ -17,6 +17,7 @@ body {
     border: 1px solid #3d3d3d;
     color: #3d3d3d;
     font-size: 18px;
+    outline: none;
     font-weight: 400;
   }
 
@@ -251,7 +252,6 @@ body {
   }
 
   &__logo {
-    // flex: 1 1 0;
     font-family: Staatliches;
     font-size: 24px;
     font-weight: 400;
@@ -285,7 +285,7 @@ body {
     color: $whiteTextColor;
     font-size: 14px;
     font-weight: 400;
-    margin-right: 16px;
+    margin-right: 8px;
   }
 }
 
@@ -983,6 +983,7 @@ body {
       height: 290px;
       border-radius: 50%;
       background-color: $loadingColor;
+      border: 1px solid #ddd;
     }
 
     .btn--update {

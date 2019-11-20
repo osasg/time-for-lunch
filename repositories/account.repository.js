@@ -26,7 +26,19 @@ module.exports = ({ db }) => {
 
   const update = async ({ _id, fullname, email }) => {
     const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { fullname, email } });
-    return result.ops[0];
+    return response.result.nModified;
+  }
+
+  const updatePassword = async ({ _id, currentPassword, password }) => {
+    const acc = await findById({ _id });
+    const rs = await bcrypt.compare(currentPassword, acc.password);
+    if (!rs)
+      return false;
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const response = await collection.updateOne({ _id: ObjectId(_id) }, { $set: { password: hashPassword } });
+    return response.result.nModified;
   }
 
   const remove = async ({ _id }) => {
@@ -90,6 +102,7 @@ module.exports = ({ db }) => {
     findById,
     create,
     update,
+    updatePassword,
     remove,
     removeMany,
     findByUsername,

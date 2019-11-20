@@ -216,7 +216,7 @@ class Index extends React.Component {
         }
         <div className={classnames('search', { 'hidden': lunch.status === 'DELIVERING' })}>
           {searchingArea}
-          {lunch.status !== 'ORDERING' && <div className="system-locked">System has locked</div>}
+          {lunch.status && lunch.status !== 'ORDERING' && <div className="system-locked">System has locked</div>}
         </div>
         <div className="picked">
           {todayPickArea}

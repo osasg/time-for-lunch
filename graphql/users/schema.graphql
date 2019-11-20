@@ -3,6 +3,8 @@ type Query {
 }
 
 type Mutation {
+  updateProfile(fullname: String!, email: String!): Boolean
+  updatePassword(currentPassword: String!, password: String!): Boolean
   block(_id: ID, is: Boolean!): Boolean
   remove(_id: ID): Boolean
 }

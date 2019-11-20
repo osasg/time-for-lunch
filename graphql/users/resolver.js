@@ -3,6 +3,7 @@ const Mutation = require('./user.mutation');
 
 module.exports = {
   resolver: {
-    Query
+    Query,
+    Mutation
   }
 }
