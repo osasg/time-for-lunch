@@ -49,7 +49,11 @@ import DMSList from './DMSList';
           </div>
         </div>
         <div className="dms-day-picker">
-          <input type="date" onChange={e => lunch.date = e.currentTarget.value.split('-').join('/')}/>
+          <input type="date"
+            disabled={lunch.status !== 'PREPARING'}
+            defaultValue={lunch.date.split('/').join('-')}
+            onChange={e => lunch.date = e.currentTarget.value.split('-').join('/')}
+          />
         </div>
         <div className="dms-btn-group">
           {lunch.status !== 'PREPARING' && lunch.status !== 'DELIVERED' && <button className="btn btn--cancel" onClick={() => requestUpdateStatus(-1)}>Cancel</button>}

@@ -189,11 +189,21 @@ class Index extends React.Component {
     return (
       <div className="time-for-lunch">
         <TopNav />
+        <div className="picked">
+          {todayPickArea}
+          <div className="previous-picks">
+            <div className="picked__title">Previous</div>
+            {previousPicks.map((p, i) =>
+              <div key={p._id} className="previous-picks__image-wrapper">
+                <img className="previous-picks__image" src={p.imageUrl} alt="Previous picked" />
+              </div>
+            )}
+          </div>
+        </div>
         {
           todayPick
-          && lunch.status === 'DELIVERING'
-          && <>
-            <div className="confirm">
+          && ['DELIVERING', 'DELIVERED'].includes(lunch.status)
+          ? <div className="confirm">
               <div className="confirm__message">{!isConfirmed && 'Your lunch is ready!'}</div>
               <div className="confirm__meal">
                 <img className="confirm__meal-image" src={todayPick.imageUrl} alt="TodayPick" />
@@ -212,30 +222,20 @@ class Index extends React.Component {
                 </div>
               </div>
             </div>
+          : <>
+            <div className="search">
+              {searchingArea}
+              {lunch.status && lunch.status !== 'ORDERING' && <div className="system-locked">System has locked</div>}
+            </div>
+            <div className={classnames("todaymeals-list", { "half-opacity": lunch.status !== 'ORDERING' })}>
+              {
+                !isBlocked && filteredMeals &&
+                  filteredMeals.map(m =>
+                    <MealView key={m._id} meal={m} handleOnClick={() => requestPickMeal(m.meal_id)}/>
+              )}
+            </div>
           </>
         }
-        <div className={classnames('search', { 'hidden': lunch.status === 'DELIVERING' })}>
-          {searchingArea}
-          {lunch.status && lunch.status !== 'ORDERING' && <div className="system-locked">System has locked</div>}
-        </div>
-        <div className="picked">
-          {todayPickArea}
-          <div className="previous-picks">
-            <div className="picked__title">Previous</div>
-            {previousPicks.map((p, i) =>
-              <div key={p._id} className="previous-picks__image-wrapper">
-                <img className="previous-picks__image" src={p.imageUrl} alt="Previous picked" />
-              </div>
-            )}
-          </div>
-        </div>
-        <div className={classnames({ "todaymeals-list": true, "half-opacity": lunch.status !== 'ORDERING', 'hidden': lunch.status === 'DELIVERING' })}>
-          {
-            !isBlocked && filteredMeals &&
-              filteredMeals.map(m =>
-                <MealView key={m._id} meal={m} handleOnClick={() => requestPickMeal(m.meal_id)}/>
-          )}
-        </div>
       </div>
     );
   }

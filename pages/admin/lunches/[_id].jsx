@@ -67,17 +67,17 @@ const numberStatuses = [
     if (lunch.status === statuses.DELIVERED)
       return;
 
-    if (lunchStatus === statuses.SUSPENDING) {
+    if (lunch.status === statuses.PREPARING && lunchStatus === statuses.SUSPENDING) {
       const query = lunch._id
       ? `
         mutation UpdateLunch($_id: ID!, $meal_ids: [ID!]!, $date: String!) {
-          updateLunch(_id: $_id, meal_ids: $meal_ids, date: $date) {
+          result: updateLunch(_id: $_id, meal_ids: $meal_ids, date: $date) {
             _id
           }
         }`
       : `
         mutation CreateLunch($meal_ids: [ID!]!, $date: String!) {
-          createLunch(meal_ids: $meal_ids, date: $date) {
+          result: createLunch(meal_ids: $meal_ids, date: $date) {
             _id
           }
         }`
@@ -94,7 +94,10 @@ const numberStatuses = [
       if (err)
         return console.error(err);
 
-      Router.push('/admin/lunches/' + res.data.data[Object.keys(res.data.data)[0]]._id);
+      if (!res.data.data.result)
+        return alert('Date existing');
+
+      Router.push('/admin/lunches/' + res.data.data.result._id);
       return;
     }
 
@@ -166,6 +169,7 @@ const numberStatuses = [
               requestUpdateStatus={requestUpdateStatus}
             />
           </div>
+          <div className="lunch-status">Status: <span>{lunch.status}</span></div>
           {renderMeals}
         </div>
       </DashboardLayout>

@@ -3,15 +3,23 @@ const { to } = require('await-to-js');
 module.exports = {
   createLunch: async (root, { meal_ids, date }, { repos }) => {
     const [ err, lunch ] = await to(repos.Lunch.create({ meal_ids, date }));
+    if (err) {
+      if (err.message === 'EXSITING')
+        return null;
+    }
 
     return lunch;
   },
   updateLunch: async (root, { _id, meal_ids, date }, { repos }) => {
     const [ err0 ] = await to(repos.Lunch.update({ _id, meal_ids, date }));
+    if (err0) {
+      if (err0.message === 'EXSITING')
+        return null;
+    }
 
     const [ err1, lunch ] = await to(repos.Lunch.findById({ _id }));
 
-    return ;
+    return lunch;
   },
   pickLunch: async (root, { meal_id, _id }, { repos, user }) => {
     const [ err0 ] = await to(repos.Lunch.updateWithAccount({ account_id: user._id, _id, meal_id }));

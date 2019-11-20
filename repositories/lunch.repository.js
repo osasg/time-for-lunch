@@ -52,7 +52,7 @@ module.exports = ({ db }) => {
   const create = async ({ meal_ids, date }) => {
     const existing = await collection.findOne({ date });
     if (existing)
-      return existing;
+      throw new Error('EXISTING');
 
     const meals = meal_ids.map(meal_id => ({ meal_id, pickers: [] }));
 
@@ -64,6 +64,10 @@ module.exports = ({ db }) => {
   }
 
   const update = async ({ _id, meal_ids, date }) => {
+    const existing = await collection.findOne({ _id: { $ne: ObjectId(_id) }, date });
+    if (existing)
+      throw new Error('EXISTING');
+
     const meals = meal_ids.map(meal_id => ({ meal_id, pickers: [] }));
 
     await collection.updateOne({ _id: ObjectId(_id) }, { $set: {
