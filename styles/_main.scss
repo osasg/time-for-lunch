@@ -27,6 +27,11 @@ body {
   }
 }
 
+button {
+  outline: none;
+  cursor: pointer;
+}
+
 .lunch-title a {
   height: 39px;
   color: $primaryColor;
@@ -271,8 +276,10 @@ body {
     text-transform: uppercase;
   }
 
-  &__current-user {
+  &__logout {
     margin-left: auto;
+    margin-right: 24px;
+    cursor: pointer;
   }
 
   &__current-user a {
@@ -285,7 +292,6 @@ body {
     color: $whiteTextColor;
     font-size: 14px;
     font-weight: 400;
-    margin-right: 8px;
   }
 }
 

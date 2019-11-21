@@ -75,8 +75,11 @@ class SignUpState {
     const [ err, res ] = await to(axios.post('/api/auth/signup', { username, password }));
     if (err) return err;
 
-    if (res.data.error)
+    if (res.data.error) {
+      this.usernameError = res.data.error.username;
+      this.passwordError = res.data.error.password;
       return;
+    }
 
     Router.push('/login');
   }

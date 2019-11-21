@@ -5,8 +5,6 @@ const { to } = require('await-to-js');
 const jwt = require('jsonwebtoken');
 const status = require('http-status');
 
-const { loginValidator } = require('../../validators/');
-
 const postSignIn = async (req, res, next) => {
   const { Account } = req.repos;
   const { username, password } = req.body;
@@ -52,6 +50,17 @@ const postSignIn = async (req, res, next) => {
 const postSignUp = async (req, res, next) => {
   const { Account } = req.repos;
   const { username, password } = req.body;
+
+  const [ err0, existing ] = await to(Account.findByUsername({ username }));
+  if (existing)
+    return res.status(200).send({
+      success: false,
+      message: 'SignUp failed',
+      error: {
+        username: 'Account has already been taken!'
+      }
+    });
+
   const [ err1, account ] = await to(Account.create({ username, password }));
   if (err1) return next(err1);
 

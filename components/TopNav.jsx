@@ -14,6 +14,12 @@ export default inject(['currentUser'])(observer(({ currentUser }) => {
         <div className="top-nav__admin-link">
           <Link href="/admin"><a>Admin</a></Link>
         </div>
+        <div className="top-nav__logout" onClick={() => {
+          document.cookie = 'token=';
+          location.reload();
+        }}>
+          Logout
+        </div>
         <div className="top-nav__current-user">
           <Link href="/profile">
             <a>

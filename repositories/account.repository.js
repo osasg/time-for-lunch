@@ -18,7 +18,7 @@ module.exports = ({ db }) => {
     const hashPassword = await bcrypt.hash(password, 10);
 
     const response = await collection.insertOne({
-      username, password: hashPassword, fullname, roles: [ "user" ]
+      username, password: hashPassword, fullname, roles: [ "USER" ]
     });
 
     return response.ops[0];

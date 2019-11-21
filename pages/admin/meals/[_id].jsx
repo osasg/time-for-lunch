@@ -14,23 +14,35 @@ import MealFormBody from '../../../components/MealFormBody';
 
 import RemoveIcon from '../../../public/icons/remove.svg';
 
-import data from '../../../data-sample.json';
-
 class AdminMealDetailsState {
   @observable meal = {};
 
   @action uploadImage = e => {
     const file = e.currentTarget.files[0];
 
-    if (!file.type.includes('image/png'))
+    if (!file.type.includes('image'))
       return;
 
     this.meal.image = file;
     this.meal.imageUrl = URL.createObjectURL(file);
   }
 
-  requestRemoveMeal = () => {
+  requestRemoveMeal = async e => {
+    e.preventDefault();
+    const { _id } = this.meal;
 
+    const [ err, res ] = await to(axios.post('/graphql', {
+      query: `
+        mutation RemoveMeal {
+          removeMeal(_id: "${_id}")
+        }
+      `
+    }));
+
+    if (err)
+      return console.error(err);
+
+    Router.push('/admin/meals');
   }
 
   requestSaveMeal = async e => {

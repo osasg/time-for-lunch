@@ -9,11 +9,10 @@ module.exports = {
   },
   updateMeal: async (root, { _id, name, image }, { repos }) => {
     const { stream, filename, mimetype, encoding } = await image;
-    console.log(_id)
+    console.log(image)
+    const [ err, result ] = await to(repos.Meal.update({ _id, name, imageUrl: '' }));
 
-    const [ err, meal ] = await to(repos.Meal.update({ _id, name, imageUrl: '' }));
-
-    return { ...meal, _id: meal._id.toString() };
+    return { ...meal, _id };
   },
   removeMeal: async (root, { _id }, { repos }) => {
     const [ err, result ] = await to(repos.Meal.remove({ _id }));
