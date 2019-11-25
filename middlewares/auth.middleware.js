@@ -19,6 +19,7 @@ const requireAuth = async (req, res, next) => {
 };
 
 const requireRole = roles => async (req, res, next) => {
+  const { Account } = req.repos;
   let accountRoles;
   if (!req.user) {
     [ err, accountRoles ] = await to(Account.findRolesById({ _id: req.user._id }));

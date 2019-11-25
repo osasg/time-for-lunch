@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import withDashboardLayout from '../../components/WithDashboardLayout';
 import DashboardNav from '../../components/DashboardNav';
+import DashboardLayout from '../../components/DashboardLayout';
 
 import MealsIcon from '../../public/icons/meals.svg';
 import UsersIcon from '../../public/icons/users.svg';
@@ -33,15 +34,22 @@ const Board = ({ name }) => {
 
 const AdminIndex = () => {
   return (
-    <div className="admin-index">
-      <DashboardNav currentBoard={'Home'} />
-      <Board name="Meals"/>
-      <Board name="Users"/>
-      <Board name="Lunches"/>
-      <Board name="Analyst"/>
-      <Board name="Delivery"/>
-    </div>
+    <DashboardLayout>
+      <div className="admin-index">
+        <DashboardNav currentBoard={'Home'} />
+        <Board name="Meals"/>
+        <Board name="Users"/>
+        <Board name="Lunches"/>
+        <Board name="Analyst"/>
+        <Board name="Delivery"/>
+      </div>
+    </DashboardLayout>
   );
 }
 
-export default withDashboardLayout(AdminIndex);
+AdminIndex.getInitialProps = async ({ currentUser }) => {
+  currentUser.requireRole([ 'ADMIN' ]);
+  return {};
+}
+
+export default AdminIndex;

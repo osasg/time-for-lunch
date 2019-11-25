@@ -31,11 +31,18 @@ class CurrentUser {
   isAuth = () =>
     !!this.username
 
+  hasRole = (role) =>
+    this.roles && this.roles.includes(role)
+
   requireAuth = () =>
     !!this.username || this.redirectToLoginPage()
 
-  hasRole = (role) =>
-    (this.requireAuth() && this.roles.includes(role)) || this.redirectToLoginPage()
+  requireRole = (roles) => {
+    this.requireAuth();
+
+    if (!roles.some(r => this.roles.includes(r)))
+      this.redirectToLoginPage();
+  }
 }
 
 // currentUser init in both server and client
